@@ -2,8 +2,164 @@ extern crate cpal;
 use cpal::traits::{DeviceTrait, HostTrait, StreamTrait};
 use anyhow::Error;
 use std::sync::{Arc, Mutex};
+use std::thread;
+use std::time::Duration as StdDuration; // Alias to avoid conflict with enum variant
 
-fn main() -> Result<(), Error> {
+// --- 1. Define Traits for Generic Parameters ---
+
+/// Trait for types that can provide a frequency in Hz (f32).
+pub trait ToFrequency {
+    fn to_hz(&self) -> f32;
+}
+
+/// Trait for types that can provide a duration in minutes (u64).
+pub trait ToMinutes {
+    fn to_minutes(&self) -> u64;
+}
+
+// --- 2. Define Enums for Carrier Frequency ---
+
+/// Represents common brainwave carrier frequencies.
+#[derive(Debug, Clone, Copy)]
+pub enum CarrierFrequency {
+    /// Delta wave range (0.5 - 4 Hz), often associated with deep sleep.
+    Delta,
+    /// Theta wave range (4 - 8 Hz), associated with meditation, relaxation, and creativity.
+    Theta,
+    /// Alpha wave range (8 - 12 Hz), associated with relaxed, yet alert states.
+    Alpha,
+    /// Beta wave range (12 - 30 Hz), associated with active, busy, or anxious thinking.
+    Beta,
+    /// Gamma wave range (30 - 100 Hz), associated with higher-level cognitive functions.
+    Gamma,
+    /// Allows specifying a custom carrier frequency in Hz.
+    Custom(f32),
+}
+
+impl ToFrequency for CarrierFrequency {
+    fn to_hz(&self) -> f32 {
+        match self {
+            CarrierFrequency::Delta => 100.0, // Example base for Delta, often higher than beat freq
+            CarrierFrequency::Theta => 200.0,
+            CarrierFrequency::Alpha => 300.0,
+            CarrierFrequency::Beta => 400.0,
+            CarrierFrequency::Gamma => 500.0,
+            CarrierFrequency::Custom(hz) => *hz,
+        }
+    }
+}
+
+// --- 3. Define Enums for Beat Frequency (Binaural Beat) ---
+
+/// Represents common brainwave beat frequencies.
+#[derive(Debug, Clone, Copy)]
+pub enum BeatFrequency {
+    /// Delta wave range (0.5 - 4 Hz), for deep relaxation, sleep.
+    Delta,
+    /// Theta wave range (4 - 8 Hz), for meditation, creativity.
+    Theta,
+    /// Alpha wave range (8 - 12 Hz), for relaxation, focus.
+    Alpha,
+    /// Beta wave range (12 - 30 Hz), for alertness, concentration.
+    Beta,
+    /// Gamma wave range (30 - 100 Hz), for high-level cognitive processing.
+    Gamma,
+    /// Allows specifying a custom beat frequency in Hz.
+    Custom(f32),
+}
+
+impl ToFrequency for BeatFrequency {
+    fn to_hz(&self) -> f32 {
+        match self {
+            BeatFrequency::Delta => 2.0, // Typical beat frequency for Delta
+            BeatFrequency::Theta => 6.0, // Typical beat frequency for Theta
+            BeatFrequency::Alpha => 10.0, // Typical beat frequency for Alpha
+            BeatFrequency::Beta => 20.0, // Typical beat frequency for Beta
+            BeatFrequency::Gamma => 40.0, // Typical beat frequency for Gamma
+            BeatFrequency::Custom(hz) => *hz,
+        }
+    }
+}
+
+// --- 4. Define Enums for Duration ---
+
+/// Represents common durations in minutes.
+#[derive(Debug, Clone, Copy)]
+pub enum Duration {
+    FiveMinutes,
+    TenMinutes,
+    FifteenMinutes,
+    ThirtyMinutes,
+    SixtyMinutes,
+    /// Allows specifying a custom duration in minutes.
+    Custom(u64),
+}
+
+impl ToMinutes for Duration {
+    fn to_minutes(&self) -> u64 {
+        match self {
+            Duration::FiveMinutes => 5,
+            Duration::TenMinutes => 10,
+            Duration::FifteenMinutes => 15,
+            Duration::ThirtyMinutes => 30,
+            Duration::SixtyMinutes => 60,
+            Duration::Custom(minutes) => *minutes,
+        }
+    }
+}
+
+// --- 5. Generic Binaural Beat Generation Function ---
+
+/// Generates and plays binaural beat tones based on specified carrier frequency,
+/// beat frequency, and duration.
+///
+/// # Type Parameters
+/// - `C`: Type implementing `ToFrequency` for the carrier frequency.
+/// - `B`: Type implementing `ToFrequency` for the beat frequency.
+/// - `D`: Type implementing `ToMinutes` for the duration.
+///
+/// # Arguments
+/// - `carrier`: An instance of a type providing the carrier frequency.
+/// - `beat`: An instance of a type providing the beat frequency.
+/// - `duration`: An instance of a type providing the total duration.
+///
+/// # Returns
+/// `Result<(), anyhow::Error>` indicating success or failure.
+pub fn generate_binaural_beats<C, B, D>(
+    carrier: C,
+    beat: B,
+    duration: D,
+) -> Result<(), Error>
+where
+    C: ToFrequency,
+    B: ToFrequency,
+    D: ToMinutes,
+{
+    // Extract concrete values from generic parameters
+    let carrier_hz = carrier.to_hz();
+    let beat_hz = beat.to_hz();
+    let duration_minutes = duration.to_minutes();
+
+    // Calculate left and right ear frequencies
+    let f_left = carrier_hz - (beat_hz / 2.0);
+    let f_right = carrier_hz + (beat_hz / 2.0);
+
+    // Basic validation for frequencies
+    if f_left <= 0.0 || f_right <= 0.0 {
+        return Err(anyhow::anyhow!("Calculated frequency for one ear is zero or negative. Adjust carrier or beat frequency."));
+    }
+    if duration_minutes == 0 {
+        return Err(anyhow::anyhow!("Duration must be greater than zero minutes."));
+    }
+
+    println!("--- Binaural Beat Settings ---");
+    println!("Carrier Frequency: {:.2} Hz", carrier_hz);
+    println!("Beat Frequency: {:.2} Hz", beat_hz);
+    println!("Left Ear Frequency: {:.2} Hz", f_left);
+    println!("Right Ear Frequency: {:.2} Hz", f_right);
+    println!("Duration: {} minutes", duration_minutes);
+    println!("----------------------------");
+
     let host = cpal::default_host();
     
     let device = host.default_output_device()
@@ -11,9 +167,8 @@ fn main() -> Result<(), Error> {
     
     let config = device.default_output_config()?;
 
-    let sample_rate = config.sample_rate().0 as f32;
-    let f_left = 440.0;
-    let f_right = 447.0;
+    let sample_rate_val = config.sample_rate().0 as f32;
+    let channels_val = config.channels() as usize;
 
     let sample_clock_left = Arc::new(Mutex::new(0f32));
     let sample_clock_right = Arc::new(Mutex::new(0f32));
@@ -21,28 +176,24 @@ fn main() -> Result<(), Error> {
     let sample_clock_left_for_closure = Arc::clone(&sample_clock_left);
     let sample_clock_right_for_closure = Arc::clone(&sample_clock_right);
 
-    // FIX: Clone the config here
-    let config_for_stream = config.clone(); // <--- Clone the config for the stream builder
-
     let stream = device.build_output_stream(
-        &config.into(), // This consumes 'config'
+        &config.clone().into(), // Clone config for the stream builder
         move |data: &mut [f32], _: &cpal::OutputCallbackInfo| {
             let mut current_sample_clock_left = sample_clock_left_for_closure.lock().unwrap();
             let mut current_sample_clock_right = sample_clock_right_for_closure.lock().unwrap();
 
-            // Use config_for_stream or a captured part of it within the closure
-            for frame in data.chunks_mut(config_for_stream.channels() as usize) { // <--- Use config_for_stream
-                let left_sample = (2.0 * std::f32::consts::PI * f_left * *current_sample_clock_left / sample_rate).sin();
+            for frame in data.chunks_mut(channels_val) {
+                let left_sample = (2.0 * std::f32::consts::PI * f_left * *current_sample_clock_left / sample_rate_val).sin();
                 *current_sample_clock_left += 1.0;
 
-                let right_sample = (2.0 * std::f32::consts::PI * f_right * *current_sample_clock_right / sample_rate).sin();
+                let right_sample = (2.0 * std::f32::consts::PI * f_right * *current_sample_clock_right / sample_rate_val).sin();
                 *current_sample_clock_right += 1.0;
 
-                if config_for_stream.channels() == 2 { // <--- Use config_for_stream
-                    frame[0] = left_sample * 0.5;
+                if channels_val == 2 {
+                    frame[0] = left_sample * 0.5; // Reduce amplitude to avoid clipping
                     frame[1] = right_sample * 0.5;
                 } else {
-                    frame[0] = (left_sample + right_sample) * 0.25;
+                    frame[0] = (left_sample + right_sample) * 0.25; // For mono, sum and reduce further
                 }
             }
         },
@@ -52,9 +203,40 @@ fn main() -> Result<(), Error> {
 
     stream.play()?;
 
-    println!("Generating binaural beats for 10 seconds...");
-    std::thread::sleep(std::time::Duration::from_secs(10));
-    println!("Done.");
+    let total_duration_secs = duration_minutes * 60;
+    println!("Playing for {} seconds...", total_duration_secs);
+    thread::sleep(StdDuration::from_secs(total_duration_secs));
+    println!("Playback finished.");
+
+    Ok(())
+}
+
+// --- Main function to demonstrate usage ---
+
+fn main() -> Result<(), Error> {
+    // Example 1: Using predefined enum variants
+    println!("\n--- Playing Alpha Beat for 1 Minutes ---");
+    generate_binaural_beats(
+        CarrierFrequency::Alpha,
+        BeatFrequency::Alpha,
+        Duration::Custom(1),
+    )?;
+
+    // Example 2: Using custom frequencies and duration
+    println!("\n--- Playing Custom Beat (Carrier 250Hz, Beat 6Hz) for 1 Minutes ---");
+    generate_binaural_beats(
+        CarrierFrequency::Custom(250.0),
+        BeatFrequency::Custom(6.0),
+        Duration::Custom(1),
+    )?;
+
+    // Example 3: Another predefined combination
+    println!("\n--- Playing Theta Beat for 1 Minutes ---");
+    generate_binaural_beats(
+        CarrierFrequency::Beta, // Note: Carrier is Beta, Beat is Theta
+        BeatFrequency::Theta,
+        Duration::Custom(1),
+    )?;
 
     Ok(())
 }
