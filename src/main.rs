@@ -213,30 +213,108 @@ where
 
 // --- Main function to demonstrate usage ---
 
-fn main() -> Result<(), Error> {
-    // Example 1: Using predefined enum variants
-    println!("\n--- Playing Alpha Beat for 1 Minutes ---");
+fn relaxation() -> Result<(), Error> {
+    /*
+    For relaxation, you'll want to use frequencies in the Alpha and Theta ranges.
+
+        Alpha (8-12 Hz): This range is associated with a state of relaxed alertness, perfect for de-stressing or light meditation.
+        Theta (4-8 Hz): This range is linked to deep relaxation, meditation, and creativity.
+    */
+
     generate_binaural_beats(
-        CarrierFrequency::Alpha,
+        CarrierFrequency::Alpha, // Or a custom value like CarrierFrequency::Custom(350.0)
         BeatFrequency::Alpha,
-        Duration::Custom(1),
+        Duration::FifteenMinutes,
     )?;
 
-    // Example 2: Using custom frequencies and duration
-    println!("\n--- Playing Custom Beat (Carrier 250Hz, Beat 6Hz) for 1 Minutes ---");
+    // For deeper relaxation
     generate_binaural_beats(
-        CarrierFrequency::Custom(250.0),
-        BeatFrequency::Custom(6.0),
-        Duration::Custom(1),
-    )?;
-
-    // Example 3: Another predefined combination
-    println!("\n--- Playing Theta Beat for 1 Minutes ---");
-    generate_binaural_beats(
-        CarrierFrequency::Beta, // Note: Carrier is Beta, Beat is Theta
+        CarrierFrequency::Theta,
         BeatFrequency::Theta,
-        Duration::Custom(1),
+        Duration::ThirtyMinutes,
     )?;
 
     Ok(())
+}
+
+fn sleep() -> Result<(), Error> {
+    /*
+    For sleep, the goal is to use frequencies in the Delta range.
+
+        Delta (0.5-4 Hz): This is the brainwave state associated with deep, dreamless sleep.
+    */
+    generate_binaural_beats(
+        CarrierFrequency::Delta,
+        BeatFrequency::Delta,
+        Duration::SixtyMinutes,
+    )?;
+    Ok(())
+}
+
+fn focus_intelligence() -> Result<(), Error> {
+    /*
+    For focus and intelligence, you'll use frequencies in the Beta and Gamma ranges.
+
+        Beta (12-30 Hz): This is the normal waking state, associated with alertness, concentration, and problem-solving.
+        Gamma (30-100 Hz): Gamma waves are the fastest brainwaves and are linked to high-level cognitive function, learning, and intelligence.
+    */
+
+    // For normal focus and concentration
+    generate_binaural_beats(
+        CarrierFrequency::Beta,
+        BeatFrequency::Beta,
+        Duration::ThirtyMinutes,
+    )?;
+
+    // For high-level cognitive function
+    generate_binaural_beats(
+        CarrierFrequency::Gamma,
+        BeatFrequency::Gamma,
+        Duration::TenMinutes,
+    )?;
+
+    Ok(())
+}
+
+fn ephoria() -> Result<(), Error> {
+    // For Euphoria (using a 40 Hz beat frequency)
+    // Euphoria: This state is often linked to the release of endorphins and can be achieved with frequencies in the Gamma or high Alpha ranges. Some sources also suggest a beat frequency of 40 Hz for this state.
+
+    generate_binaural_beats(
+        CarrierFrequency::Custom(300.0), // Use a suitable carrier frequency
+        BeatFrequency::Custom(40.0),
+        Duration::TenMinutes,
+    )?;
+
+    Ok(())
+}
+
+fn intuition() -> Result<(), Error> {
+    // For Intuition (using a Theta beat)
+    //   Intuition: This is typically associated with Theta waves, the state between being awake and asleep, and Gamma waves, which are thought to integrate different parts of the brain. A combination of the two could be used.
+
+    generate_binaural_beats(
+        CarrierFrequency::Theta,
+        BeatFrequency::Theta,
+        Duration::FifteenMinutes,
+    )?;
+
+    Ok(())
+}
+
+fn healing() -> Result<(), Error> {
+     
+    // For Healing (using a Delta beat)
+    //Healing: Many practitioners link healing states to a combination of Delta and Theta waves, as these are the states your brain is in during deep restorative sleep.
+    generate_binaural_beats(
+        CarrierFrequency::Delta,
+        BeatFrequency::Delta,
+        Duration::SixtyMinutes,
+    )?;
+
+    Ok(())
+}
+
+fn main() -> Result<(), Error> {
+     
 }
