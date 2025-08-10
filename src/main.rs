@@ -2,7 +2,7 @@ extern crate cpal;
 use cpal::traits::{DeviceTrait, HostTrait, StreamTrait};
 use anyhow::Error;
 use std::sync::{Arc, Mutex};
-use std::thread;
+use std::{fmt, thread};
 use std::time::Duration as StdDuration; // Alias to avoid conflict with enum variant
 
 // --- 1. Define Traits for Generic Parameters ---
@@ -366,6 +366,46 @@ impl From<Preset> for BinauralPreset {
     }
 }
 
+impl fmt::Display for Preset {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            Preset::Focus => write!(f, "Focus"),
+            Preset::HighFocus => write!(f, "High Focus"),
+            Preset::Relaxation => write!(f, "Relaxation"),
+            Preset::DeepRelaxation => write!(f, "Deep Relaxation"),
+            Preset::Sleep => write!(f, "Sleep"),
+            Preset::Chanting => write!(f, "Chanting"),
+            Preset::Intuition => write!(f, "Intuition"),
+            Preset::Astral => write!(f, "Astral"),
+            Preset::Healing => write!(f, "Healing"),
+            Preset::Alpha => write!(f, "Alpha"),
+            Preset::Intelligence => write!(f, "Intelligence"),
+            Preset::Euphoria => write!(f, "Euphoria"),
+            Preset::CrownFocus => write!(f, "Crown Chakra Focus"),
+            Preset::CrownRelaxation => write!(f, "Crown Chakra Relaxation"),
+            Preset::CrownSleep => write!(f, "Crown Chakra Sleep"),
+            Preset::CrownChanting => write!(f, "Crown Chakra Chanting"),
+            Preset::CrownIntuition => write!(f, "Crown Chakra Intuition"),
+            Preset::CrownAstral => write!(f, "Crown Chakra Astral"),
+            Preset::SolfeggioRoot => write!(f, "Solfeggio Root Chakra"),
+            Preset::SolfeggioSacral => write!(f, "Solfeggio Sacral Chakra"),
+            Preset::SolfeggioSolarPlexus => write!(f, "Solfeggio Solar Plexus Chakra"),
+            Preset::SolfeggioHeart => write!(f, "Solfeggio Heart Chakra"),
+            Preset::SolfeggioThroat => write!(f, "Solfeggio Throat Chakra"),
+            Preset::SolfeggioThirdEye => write!(f, "Solfeggio Third Eye Chakra"),
+            Preset::SolfeggioCrown => write!(f, "Solfeggio Crown Chakra"),
+            Preset::TuningForkRoot => write!(f, "Tuning Fork Root Chakra"),
+            Preset::TuningForkSacral => write!(f, "Tuning Fork Sacral Chakra"),
+            Preset::TuningForkSolarPlexus => write!(f, "Tuning Fork Solar Plexus Chakra"),
+            Preset::TuningForkHeart => write!(f, "Tuning Fork Heart Chakra"),
+            Preset::TuningForkThroat => write!(f, "Tuning Fork Throat Chakra"),
+            Preset::TuningForkThirdEye => write!(f, "Tuning Fork Third Eye Chakra"),
+            Preset::TuningForkCrown => write!(f, "Tuning Fork Crown Chakra"),
+        }
+    }
+}
+
+
 // --- 5. Generic Binaural Beat Generation Function ---
 
 /// Generates and plays binaural beat tones based on specified carrier frequency,
@@ -473,8 +513,9 @@ where
 
 fn main() -> Result<(), Error> {
       // Call the function using a single Preset enum variant.
-    let preset: BinauralPreset = Preset::Relaxation.into();
-    println!("\n--- Playing a pre-defined preset: Relaxation ---");
+    let preset_type = Preset::Relaxation;
+    let preset: BinauralPreset = preset_type.into();
+    println!("\n--- Playing a pre-defined preset: {} ---",preset_type);
     generate_binaural_beats(preset.carrier, preset.beat, preset.duration)?;
 
     /*
