@@ -32,6 +32,23 @@ pub enum CarrierFrequency {
     Beta,
     /// Gamma wave range (30 - 100 Hz), associated with higher-level cognitive functions.
     Gamma,
+    
+    SolfeggioRoot,
+    SolfeggioSacral,
+    SolfeggioSolarPlexus,
+    SolfeggioHeart,
+    SolfeggioThroat,
+    SolfeggioThirdEye,
+    SolfeggioCrown,
+
+    TuningForkRoot,
+    TuningForkSacral,
+    TuningForkSolarPlexus,
+    TuningForkHeart,
+    TuningForkThroat,
+    TuningForkThirdEye,
+    TuningForkCrown,
+    
     /// Allows specifying a custom carrier frequency in Hz.
     Custom(f32),
 }
@@ -44,6 +61,25 @@ impl ToFrequency for CarrierFrequency {
             CarrierFrequency::Alpha => 300.0,
             CarrierFrequency::Beta => 400.0,
             CarrierFrequency::Gamma => 500.0,
+
+            // Solfeggio Tones
+            CarrierFrequency::SolfeggioRoot => 396.0,
+            CarrierFrequency::SolfeggioSacral => 417.0,
+            CarrierFrequency::SolfeggioSolarPlexus => 528.0,
+            CarrierFrequency::SolfeggioHeart => 639.0,
+            CarrierFrequency::SolfeggioThroat => 741.0,
+            CarrierFrequency::SolfeggioThirdEye => 852.0,
+            CarrierFrequency::SolfeggioCrown => 963.0,
+
+            // Planetary/Tuning Fork Tones
+            CarrierFrequency::TuningForkRoot => 194.18,
+            CarrierFrequency::TuningForkSacral => 210.42,
+            CarrierFrequency::TuningForkSolarPlexus => 126.22,
+            CarrierFrequency::TuningForkHeart => 136.10,
+            CarrierFrequency::TuningForkThroat => 141.27,
+            CarrierFrequency::TuningForkThirdEye => 221.23,
+            CarrierFrequency::TuningForkCrown => 172.06,
+
             CarrierFrequency::Custom(hz) => *hz,
         }
     }
@@ -315,6 +351,31 @@ fn healing() -> Result<(), Error> {
     Ok(())
 }
 
-fn main() -> Result<(), Error> {
+
+fn astral() -> Result<(), Error> {
      
+    //Astral has a Carrier frequency of 140.0 and a beat frequency of 6.3
+    generate_binaural_beats(
+        CarrierFrequency::Custom(140.0),
+        BeatFrequency::Custom(6.3),
+        Duration::SixtyMinutes,
+    )?;
+
+    generate_binaural_beats(
+        CarrierFrequency::Custom(140.0),
+        BeatFrequency::Custom(6.3),
+        Duration::SixtyMinutes,
+    )?;
+
+    generate_binaural_beats(
+        CarrierFrequency::SolfeggioRoot,
+        BeatFrequency::Custom(6.3),
+        Duration::SixtyMinutes,
+    )?;
+
+    Ok(())
+}
+
+fn main() -> Result<(), Error> {
+     astral()
 }
