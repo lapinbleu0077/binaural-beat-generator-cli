@@ -144,6 +144,228 @@ impl ToMinutes for Duration {
     }
 }
 
+#[derive(Debug, Clone, Copy)]
+pub struct BinauralPreset {
+    pub carrier: CarrierFrequency,
+    pub beat: BeatFrequency,
+    pub duration: Duration,
+}
+
+// The new Preset enum
+#[derive(Debug, Clone, Copy)]
+pub enum Preset {
+    // General presets
+    Focus,
+    HighFocus,
+    Relaxation,
+    DeepRelaxation,
+    Sleep,
+    Chanting,
+    Intuition,
+    Astral,
+    Healing,
+    Alpha,
+    Intelligence,
+    Euphoria,
+    // Crown Chakra presets
+    CrownFocus,
+    CrownRelaxation,
+    CrownSleep,
+    CrownChanting,
+    CrownIntuition,
+    CrownAstral,
+    // Solfeggio Chakra presets
+    SolfeggioRoot,
+    SolfeggioSacral,
+    SolfeggioSolarPlexus,
+    SolfeggioHeart,
+    SolfeggioThroat,
+    SolfeggioThirdEye,
+    SolfeggioCrown,
+    // Tuning Fork Chakra presets
+    TuningForkRoot,
+    TuningForkSacral,
+    TuningForkSolarPlexus,
+    TuningForkHeart,
+    TuningForkThroat,
+    TuningForkThirdEye,
+    TuningForkCrown,
+}
+
+impl From<Preset> for BinauralPreset {
+    fn from(preset: Preset) -> Self {
+        match preset {
+            // General Presets
+            Preset::Focus => BinauralPreset {
+                carrier: CarrierFrequency::Beta,
+                beat: BeatFrequency::Beta,
+                duration: Duration::ThirtyMinutes,
+            },    
+            Preset::HighFocus => BinauralPreset {
+                carrier: CarrierFrequency::Gamma,
+                beat: BeatFrequency::Gamma,
+                duration: Duration::ThirtyMinutes,
+            },
+            Preset::Relaxation => BinauralPreset {
+                carrier: CarrierFrequency::Alpha,
+                beat: BeatFrequency::Alpha,
+                duration: Duration::FifteenMinutes,
+            },
+            Preset::DeepRelaxation => BinauralPreset {
+                carrier: CarrierFrequency::Theta,
+                beat: BeatFrequency::Theta,
+                duration: Duration::FifteenMinutes,
+            },
+            Preset::Sleep => BinauralPreset {
+                carrier: CarrierFrequency::Delta,
+                beat: BeatFrequency::Delta,
+                duration: Duration::SixtyMinutes,
+            },
+            Preset::Chanting => BinauralPreset {
+                carrier: CarrierFrequency::Theta,
+                beat: BeatFrequency::Theta,
+                duration: Duration::ThirtyMinutes,
+            },
+            Preset::Intuition => BinauralPreset {
+                carrier: CarrierFrequency::Theta,
+                beat: BeatFrequency::Theta,
+                duration: Duration::FifteenMinutes,
+            },
+            Preset::Astral => BinauralPreset {
+                carrier: CarrierFrequency::Custom(140.0),
+                beat: BeatFrequency::Custom(6.3),
+                duration: Duration::SixtyMinutes,
+            },
+            Preset::Healing => BinauralPreset {
+                carrier: CarrierFrequency::Delta,
+                beat: BeatFrequency::Theta,
+                duration: Duration::SixtyMinutes,
+            },
+            Preset::Alpha => BinauralPreset {
+                carrier: CarrierFrequency::Alpha,
+                beat: BeatFrequency::Alpha,
+                duration: Duration::ThirtyMinutes,
+            },
+            Preset::Intelligence => BinauralPreset {
+                carrier: CarrierFrequency::Gamma,
+                beat: BeatFrequency::Gamma,
+                duration: Duration::TenMinutes,
+            },
+            Preset::Euphoria => BinauralPreset {
+                carrier: CarrierFrequency::Custom(210.42),
+                beat: BeatFrequency::Custom(20.0),
+                duration: Duration::TenMinutes,
+            },
+
+            // Crown Chakra Presets
+            Preset::CrownFocus => BinauralPreset {
+                carrier: CarrierFrequency::TuningForkCrown,
+                beat: BeatFrequency::Beta,
+                duration: Duration::ThirtyMinutes,
+            },
+            Preset::CrownRelaxation => BinauralPreset {
+                carrier: CarrierFrequency::TuningForkCrown,
+                beat: BeatFrequency::Alpha,
+                duration: Duration::FifteenMinutes,
+            },
+            Preset::CrownSleep => BinauralPreset {
+                carrier: CarrierFrequency::TuningForkCrown,
+                beat: BeatFrequency::Delta,
+                duration: Duration::SixtyMinutes,
+            },
+            Preset::CrownChanting => BinauralPreset {
+                carrier: CarrierFrequency::TuningForkCrown,
+                beat: BeatFrequency::Theta,
+                duration: Duration::ThirtyMinutes,
+            },
+            Preset::CrownIntuition => BinauralPreset {
+                carrier: CarrierFrequency::TuningForkCrown,
+                beat: BeatFrequency::Theta,
+                duration: Duration::FifteenMinutes,
+            },
+            Preset::CrownAstral => BinauralPreset {
+                carrier: CarrierFrequency::TuningForkCrown,
+                beat: BeatFrequency::Delta,
+                duration: Duration::SixtyMinutes,
+            },
+
+            // Solfeggio Chakra Presets
+            Preset::SolfeggioRoot => BinauralPreset {
+                carrier: CarrierFrequency::SolfeggioRoot,
+                beat: BeatFrequency::Delta,
+                duration: Duration::ThirtyMinutes,
+            },
+            Preset::SolfeggioSacral => BinauralPreset {
+                carrier: CarrierFrequency::SolfeggioSacral,
+                beat: BeatFrequency::Theta,
+                duration: Duration::ThirtyMinutes,
+            },
+            Preset::SolfeggioSolarPlexus => BinauralPreset {
+                carrier: CarrierFrequency::SolfeggioSolarPlexus,
+                beat: BeatFrequency::Alpha,
+                duration: Duration::ThirtyMinutes,
+            },
+            Preset::SolfeggioHeart => BinauralPreset {
+                carrier: CarrierFrequency::SolfeggioHeart,
+                beat: BeatFrequency::Alpha,
+                duration: Duration::FifteenMinutes,
+            },
+            Preset::SolfeggioThroat => BinauralPreset {
+                carrier: CarrierFrequency::SolfeggioThroat,
+                beat: BeatFrequency::Beta,
+                duration: Duration::TenMinutes,
+            },
+            Preset::SolfeggioThirdEye => BinauralPreset {
+                carrier: CarrierFrequency::SolfeggioThirdEye,
+                beat: BeatFrequency::Beta,
+                duration: Duration::TenMinutes,
+            },
+            Preset::SolfeggioCrown => BinauralPreset {
+                carrier: CarrierFrequency::SolfeggioCrown,
+                beat: BeatFrequency::Gamma,
+                duration: Duration::TenMinutes,
+            },
+            
+            // Tuning Fork Chakra Presets
+            Preset::TuningForkRoot => BinauralPreset {
+                carrier: CarrierFrequency::TuningForkRoot,
+                beat: BeatFrequency::Delta,
+                duration: Duration::ThirtyMinutes,
+            },
+            Preset::TuningForkSacral => BinauralPreset {
+                carrier: CarrierFrequency::TuningForkSacral,
+                beat: BeatFrequency::Theta,
+                duration: Duration::ThirtyMinutes,
+            },
+            Preset::TuningForkSolarPlexus => BinauralPreset {
+                carrier: CarrierFrequency::TuningForkSolarPlexus,
+                beat: BeatFrequency::Alpha,
+                duration: Duration::ThirtyMinutes,
+            },
+            Preset::TuningForkHeart => BinauralPreset {
+                carrier: CarrierFrequency::TuningForkHeart,
+                beat: BeatFrequency::Alpha,
+                duration: Duration::FifteenMinutes,
+            },
+            Preset::TuningForkThroat => BinauralPreset {
+                carrier: CarrierFrequency::TuningForkThroat,
+                beat: BeatFrequency::Beta,
+                duration: Duration::TenMinutes,
+            },
+            Preset::TuningForkThirdEye => BinauralPreset {
+                carrier: CarrierFrequency::TuningForkThirdEye,
+                beat: BeatFrequency::Beta,
+                duration: Duration::TenMinutes,
+            },
+            Preset::TuningForkCrown => BinauralPreset {
+                carrier: CarrierFrequency::TuningForkCrown,
+                beat: BeatFrequency::Gamma,
+                duration: Duration::TenMinutes,
+            },
+        }
+    }
+}
+
 // --- 5. Generic Binaural Beat Generation Function ---
 
 /// Generates and plays binaural beat tones based on specified carrier frequency,
@@ -249,133 +471,22 @@ where
 
 // --- Main function to demonstrate usage ---
 
-fn relaxation() -> Result<(), Error> {
-    /*
-    For relaxation, you'll want to use frequencies in the Alpha and Theta ranges.
-
-        Alpha (8-12 Hz): This range is associated with a state of relaxed alertness, perfect for de-stressing or light meditation.
-        Theta (4-8 Hz): This range is linked to deep relaxation, meditation, and creativity.
-    */
-
-    generate_binaural_beats(
-        CarrierFrequency::Alpha, // Or a custom value like CarrierFrequency::Custom(350.0)
-        BeatFrequency::Alpha,
-        Duration::FifteenMinutes,
-    )?;
-
-    // For deeper relaxation
-    generate_binaural_beats(
-        CarrierFrequency::Theta,
-        BeatFrequency::Theta,
-        Duration::ThirtyMinutes,
-    )?;
-
-    Ok(())
-}
-
-fn sleep() -> Result<(), Error> {
-    /*
-    For sleep, the goal is to use frequencies in the Delta range.
-
-        Delta (0.5-4 Hz): This is the brainwave state associated with deep, dreamless sleep.
-    */
-    generate_binaural_beats(
-        CarrierFrequency::Delta,
-        BeatFrequency::Delta,
-        Duration::SixtyMinutes,
-    )?;
-    Ok(())
-}
-
-fn focus_intelligence() -> Result<(), Error> {
-    /*
-    For focus and intelligence, you'll use frequencies in the Beta and Gamma ranges.
-
-        Beta (12-30 Hz): This is the normal waking state, associated with alertness, concentration, and problem-solving.
-        Gamma (30-100 Hz): Gamma waves are the fastest brainwaves and are linked to high-level cognitive function, learning, and intelligence.
-    */
-
-    // For normal focus and concentration
-    generate_binaural_beats(
-        CarrierFrequency::Beta,
-        BeatFrequency::Beta,
-        Duration::ThirtyMinutes,
-    )?;
-
-    // For high-level cognitive function
-    generate_binaural_beats(
-        CarrierFrequency::Gamma,
-        BeatFrequency::Gamma,
-        Duration::TenMinutes,
-    )?;
-
-    Ok(())
-}
-
-fn ephoria() -> Result<(), Error> {
-    // For Euphoria (using a 40 Hz beat frequency)
-    // Euphoria: This state is often linked to the release of endorphins and can be achieved with frequencies in the Gamma or high Alpha ranges. Some sources also suggest a beat frequency of 40 Hz for this state.
-
-    generate_binaural_beats(
-        CarrierFrequency::Custom(300.0), // Use a suitable carrier frequency
-        BeatFrequency::Custom(40.0),
-        Duration::TenMinutes,
-    )?;
-
-    Ok(())
-}
-
-fn intuition() -> Result<(), Error> {
-    // For Intuition (using a Theta beat)
-    //   Intuition: This is typically associated with Theta waves, the state between being awake and asleep, and Gamma waves, which are thought to integrate different parts of the brain. A combination of the two could be used.
-
-    generate_binaural_beats(
-        CarrierFrequency::Theta,
-        BeatFrequency::Theta,
-        Duration::FifteenMinutes,
-    )?;
-
-    Ok(())
-}
-
-fn healing() -> Result<(), Error> {
-     
-    // For Healing (using a Delta beat)
-    //Healing: Many practitioners link healing states to a combination of Delta and Theta waves, as these are the states your brain is in during deep restorative sleep.
-    generate_binaural_beats(
-        CarrierFrequency::Delta,
-        BeatFrequency::Delta,
-        Duration::SixtyMinutes,
-    )?;
-
-    Ok(())
-}
-
-
-fn astral() -> Result<(), Error> {
-     
-    //Astral has a Carrier frequency of 140.0 and a beat frequency of 6.3
-    generate_binaural_beats(
-        CarrierFrequency::Custom(140.0),
-        BeatFrequency::Custom(6.3),
-        Duration::SixtyMinutes,
-    )?;
-
-    generate_binaural_beats(
-        CarrierFrequency::Custom(140.0),
-        BeatFrequency::Custom(6.3),
-        Duration::SixtyMinutes,
-    )?;
-
-    generate_binaural_beats(
-        CarrierFrequency::SolfeggioRoot,
-        BeatFrequency::Custom(6.3),
-        Duration::SixtyMinutes,
-    )?;
-
-    Ok(())
-}
-
 fn main() -> Result<(), Error> {
-     astral()
+      // Call the function using a single Preset enum variant.
+    let preset: BinauralPreset = Preset::Relaxation.into();
+    println!("\n--- Playing a pre-defined preset: Relaxation ---");
+    generate_binaural_beats(preset.carrier, preset.beat, preset.duration)?;
+
+    /*
+    // You can still manually create presets if you want
+    let custom_preset = BinauralPreset {
+        carrier: CarrierFrequency::Custom(250.0),
+        beat: BeatFrequency::Custom(6.0),
+        duration: Duration::FiveMinutes,
+    };
+    println!("\n--- Playing a custom preset ---");
+    generate_binaural_beats(custom_preset.carrier, custom_preset.beat, custom_preset.duration)?;
+    */
+
+    Ok(())
 }
