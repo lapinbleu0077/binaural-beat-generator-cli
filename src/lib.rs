@@ -2,7 +2,10 @@ use cpal::traits::{DeviceTrait, HostTrait, StreamTrait};
 use anyhow::Error;
 use std::sync::{Arc, Mutex};
 use std::{fmt, thread};
-use std::time::Duration as StdDuration; // Alias to avoid conflict with enum variant
+use std::time::{Duration as StdDuration, Instant}; // Alias to avoid conflict with enum variant
+
+//Cancellation support
+use std::sync::atomic::{AtomicBool, Ordering};
 
 
 // --- 1. Define Traits for Generic Parameters ---
@@ -427,6 +430,7 @@ pub fn generate_binaural_beats<C, B, D>(
     carrier: C,
     beat: B,
     duration: D,
+    cancel_token : Arc<AtomicBool>
 ) -> Result<(), Error>
 where
     C: ToFrequency,
@@ -473,10 +477,26 @@ where
 
     let sample_clock_left_for_closure = Arc::clone(&sample_clock_left);
     let sample_clock_right_for_closure = Arc::clone(&sample_clock_right);
+    let stream_cancel_token = Arc::clone(&cancel_token); // Clone for the stream closure
 
     let stream = device.build_output_stream(
         &config.clone().into(), // Clone config for the stream builder
         move |data: &mut [f32], _: &cpal::OutputCallbackInfo| {
+            
+            // Check the token's state inside the audio loop
+            if stream_cancel_token.load(Ordering::Relaxed) {
+                // If the token is true, fill the buffer with silence and return
+                for frame in data.chunks_mut(channels_val) {
+                    if channels_val == 2 {
+                        frame[0] = 0.0;
+                        frame[1] = 0.0;
+                    } else {
+                        frame[0] = 0.0;
+                    }
+                }
+                return;
+            }
+
             let mut current_sample_clock_left = sample_clock_left_for_closure.lock().unwrap();
             let mut current_sample_clock_right = sample_clock_right_for_closure.lock().unwrap();
 
@@ -493,6 +513,7 @@ where
                 } else {
                     frame[0] = (left_sample + right_sample) * 0.25; // For mono, sum and reduce further
                 }
+
             }
         },
         |err| eprintln!("An error occurred on stream: {}", err),
@@ -501,10 +522,21 @@ where
 
     stream.play()?;
 
-    let total_duration_secs = duration_minutes * 60;
-    println!("Playing for {} seconds...", total_duration_secs);
-    thread::sleep(StdDuration::from_secs(total_duration_secs));
-    println!("Playback finished.");
+    // The main thread now waits for EITHER the timer to expire OR the cancel token to be set.
+    let total_duration = StdDuration::from_secs(duration_minutes * 60);
+    let start_time = Instant::now();
+
+    println!("Playing for a maximum of {} minutes...", duration_minutes);
+    
+    while start_time.elapsed() < total_duration {
+        // Break the loop immediately if the user requested cancellation
+        if cancel_token.load(Ordering::Relaxed) {
+            println!("Playback cancelled by user.");
+            break;
+        }
+        // Sleep for a short period to avoid high CPU usage
+        thread::sleep(StdDuration::from_millis(500));
+    }
 
     Ok(())
 }
