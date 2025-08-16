@@ -6,6 +6,7 @@ use std::sync::Arc;
 use anyhow::Error;
 use binaural_beat_generator::generate_binaural_beats;
 use binaural_beat_generator::{BinauralPreset, Preset};
+use chrono::Local;
 
 // --- Main function to demonstrate usage ---
 
@@ -25,6 +26,10 @@ fn main() -> Result<(), Error> {
     let preset_type = Preset::Healing;
     let preset: BinauralPreset = preset_type.into();
     println!("\n--- Playing a pre-defined preset: {} ---",preset_type);
+
+    let local = Local::now();  
+    println!("\n--- Started the program at : {} ---",local);
+
     generate_binaural_beats(preset.carrier, preset.beat, preset.duration, Arc::clone(&cancel_token))?;
 
     /*

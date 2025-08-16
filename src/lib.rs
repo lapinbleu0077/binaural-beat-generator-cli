@@ -485,11 +485,11 @@ where
     
     let config = device.default_output_config()?;
 
-    let sample_rate_val = config.sample_rate().0 as f32;
+    let sample_rate_val = config.sample_rate().0 as f64;
     let channels_val = config.channels() as usize;
 
-    let sample_clock_left = Arc::new(Mutex::new(0f32));
-    let sample_clock_right = Arc::new(Mutex::new(0f32));
+    let sample_clock_left = Arc::new(Mutex::new(0f64));
+    let sample_clock_right = Arc::new(Mutex::new(0f64));
 
     let sample_clock_left_for_closure = Arc::clone(&sample_clock_left);
     let sample_clock_right_for_closure = Arc::clone(&sample_clock_right);
@@ -517,10 +517,11 @@ where
             let mut current_sample_clock_right = sample_clock_right_for_closure.lock().unwrap();
 
             for frame in data.chunks_mut(channels_val) {
-                let left_sample = (2.0 * std::f32::consts::PI * f_left * *current_sample_clock_left / sample_rate_val).sin();
+                //Always keep the final sample outputs as f32 but make the calculations using f64 so that we don't lose the signal.
+                let left_sample = ((2.0 * std::f64::consts::PI * f_left as f64 * *current_sample_clock_left / sample_rate_val).sin()) as f32;
                 *current_sample_clock_left += 1.0;
 
-                let right_sample = (2.0 * std::f32::consts::PI * f_right * *current_sample_clock_right / sample_rate_val).sin();
+                let right_sample = ((2.0 * std::f64::consts::PI * f_right as f64 * *current_sample_clock_right / sample_rate_val).sin()) as f32;
                 *current_sample_clock_right += 1.0;
 
                 if channels_val == 2 {
