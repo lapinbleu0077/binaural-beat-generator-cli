@@ -408,6 +408,22 @@ impl fmt::Display for Preset {
     }
 }
 
+fn wait_until_end(cancel_token: Arc<AtomicBool>, duration_minutes: u64) {
+    let total_duration = StdDuration::from_secs(duration_minutes * 60);
+    let start_time = Instant::now();
+    
+    println!("Playing for a maximum of {} minutes...", duration_minutes);
+    
+    while start_time.elapsed() < total_duration {
+        // Break the loop immediately if the user requested cancellation
+        if cancel_token.load(Ordering::Relaxed) {
+            println!("Playback cancelled by user.");
+            break;
+        }
+        // Sleep for a short period to avoid high CPU usage
+        thread::sleep(StdDuration::from_millis(500));
+    }
+}
 
 // --- 5. Generic Binaural Beat Generation Function ---
 
@@ -523,23 +539,12 @@ where
     stream.play()?;
 
     // The main thread now waits for EITHER the timer to expire OR the cancel token to be set.
-    let total_duration = StdDuration::from_secs(duration_minutes * 60);
-    let start_time = Instant::now();
-
-    println!("Playing for a maximum of {} minutes...", duration_minutes);
+    wait_until_end(cancel_token, duration_minutes);
     
-    while start_time.elapsed() < total_duration {
-        // Break the loop immediately if the user requested cancellation
-        if cancel_token.load(Ordering::Relaxed) {
-            println!("Playback cancelled by user.");
-            break;
-        }
-        // Sleep for a short period to avoid high CPU usage
-        thread::sleep(StdDuration::from_millis(500));
-    }
-
     Ok(())
 }
+    
+
 
 
 
