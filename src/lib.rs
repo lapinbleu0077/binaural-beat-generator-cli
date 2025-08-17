@@ -15,9 +15,9 @@ pub trait ToFrequency {
     fn to_hz(&self) -> f32;
 }
 
-/// Trait for types that can provide a duration in minutes (u64).
+/// Trait for types that can provide a duration in minutes (u32).
 pub trait ToMinutes {
-    fn to_minutes(&self) -> u64;
+    fn to_minutes(&self) -> u32;
 }
 
 // --- 2. Define Enums for Carrier Frequency ---
@@ -131,11 +131,11 @@ pub enum Duration {
     ThirtyMinutes,
     SixtyMinutes,
     /// Allows specifying a custom duration in minutes.
-    Custom(u64),
+    Custom(u32),
 }
 
 impl ToMinutes for Duration {
-    fn to_minutes(&self) -> u64 {
+    fn to_minutes(&self) -> u32 {
         match self {
             Duration::FiveMinutes => 5,
             Duration::TenMinutes => 10,
@@ -408,8 +408,8 @@ impl fmt::Display for Preset {
     }
 }
 
-fn wait_until_end(cancel_token: Arc<AtomicBool>, duration_minutes: u64) {
-    let total_duration = StdDuration::from_secs(duration_minutes * 60);
+fn wait_until_end(cancel_token: Arc<AtomicBool>, duration_minutes: u32) {
+    let total_duration = StdDuration::from_secs((duration_minutes * 60) as u64);
     let start_time = Instant::now();
     
     println!("Playing for a maximum of {} minutes...", duration_minutes);
