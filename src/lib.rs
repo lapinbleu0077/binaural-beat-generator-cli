@@ -1,12 +1,11 @@
-use cpal::traits::{DeviceTrait, HostTrait, StreamTrait};
 use anyhow::Error;
+use cpal::traits::{DeviceTrait, HostTrait, StreamTrait};
 use std::sync::{Arc, Mutex};
-use std::{fmt, thread};
-use std::time::{Duration as StdDuration, Instant}; // Alias to avoid conflict with enum variant
+use std::time::{Duration as StdDuration, Instant};
+use std::{fmt, thread}; // Alias to avoid conflict with enum variant
 
 //Cancellation support
 use std::sync::atomic::{AtomicBool, Ordering};
-
 
 // --- 1. Define Traits for Generic Parameters ---
 
@@ -35,7 +34,7 @@ pub enum CarrierFrequency {
     Beta,
     /// Gamma wave range (30 - 100 Hz), associated with higher-level cognitive functions.
     Gamma,
-    
+
     SolfeggioRoot,
     SolfeggioSacral,
     SolfeggioSolarPlexus,
@@ -51,7 +50,7 @@ pub enum CarrierFrequency {
     TuningForkThroat,
     TuningForkThirdEye,
     TuningForkCrown,
-    
+
     /// Allows specifying a custom carrier frequency in Hz.
     Custom(f32),
 }
@@ -110,10 +109,10 @@ pub enum BeatFrequency {
 impl ToFrequency for BeatFrequency {
     fn to_hz(&self) -> f32 {
         match self {
-            BeatFrequency::Delta => 2.0, // Typical beat frequency for Delta
-            BeatFrequency::Theta => 6.0, // Typical beat frequency for Theta
+            BeatFrequency::Delta => 2.0,  // Typical beat frequency for Delta
+            BeatFrequency::Theta => 6.0,  // Typical beat frequency for Theta
             BeatFrequency::Alpha => 10.0, // Typical beat frequency for Alpha
-            BeatFrequency::Beta => 20.0, // Typical beat frequency for Beta
+            BeatFrequency::Beta => 20.0,  // Typical beat frequency for Beta
             BeatFrequency::Gamma => 40.0, // Typical beat frequency for Gamma
             BeatFrequency::Custom(hz) => *hz,
         }
@@ -203,7 +202,7 @@ impl From<Preset> for BinauralPreset {
                 carrier: CarrierFrequency::Beta,
                 beat: BeatFrequency::Beta,
                 duration: Duration::ThirtyMinutes,
-            },    
+            },
             Preset::HighFocus => BinauralPreset {
                 carrier: CarrierFrequency::Gamma,
                 beat: BeatFrequency::Gamma,
@@ -328,7 +327,7 @@ impl From<Preset> for BinauralPreset {
                 beat: BeatFrequency::Gamma,
                 duration: Duration::TenMinutes,
             },
-            
+
             // Tuning Fork Chakra Presets
             Preset::TuningForkRoot => BinauralPreset {
                 carrier: CarrierFrequency::TuningForkRoot,
@@ -411,9 +410,9 @@ impl fmt::Display for Preset {
 fn wait_until_end(cancel_token: Arc<AtomicBool>, duration_minutes: u32) {
     let total_duration = StdDuration::from_secs((duration_minutes * 60) as u64);
     let start_time = Instant::now();
-    
+
     println!("Playing for a maximum of {} minutes...", duration_minutes);
-    
+
     while start_time.elapsed() < total_duration {
         // Break the loop immediately if the user requested cancellation
         if cancel_token.load(Ordering::Relaxed) {
@@ -446,7 +445,7 @@ pub fn generate_binaural_beats<C, B, D>(
     carrier: C,
     beat: B,
     duration: D,
-    cancel_token : Arc<AtomicBool>
+    cancel_token: Arc<AtomicBool>,
 ) -> Result<(), Error>
 where
     C: ToFrequency,
@@ -464,10 +463,14 @@ where
 
     // Basic validation for frequencies
     if f_left <= 0.0 || f_right <= 0.0 {
-        return Err(anyhow::anyhow!("Calculated frequency for one ear is zero or negative. Adjust carrier or beat frequency."));
+        return Err(anyhow::anyhow!(
+            "Calculated frequency for one ear is zero or negative. Adjust carrier or beat frequency."
+        ));
     }
     if duration_minutes == 0 {
-        return Err(anyhow::anyhow!("Duration must be greater than zero minutes."));
+        return Err(anyhow::anyhow!(
+            "Duration must be greater than zero minutes."
+        ));
     }
 
     println!("--- Binaural Beat Settings ---");
@@ -479,10 +482,11 @@ where
     println!("----------------------------");
 
     let host = cpal::default_host();
-    
-    let device = host.default_output_device()
+
+    let device = host
+        .default_output_device()
         .ok_or_else(|| anyhow::anyhow!("No output device available."))?;
-    
+
     let config = device.default_output_config()?;
 
     let sample_rate_val = config.sample_rate().0 as f64;
@@ -498,7 +502,6 @@ where
     let stream = device.build_output_stream(
         &config.clone().into(), // Clone config for the stream builder
         move |data: &mut [f32], _: &cpal::OutputCallbackInfo| {
-            
             // Check the token's state inside the audio loop
             if stream_cancel_token.load(Ordering::Relaxed) {
                 // If the token is true, fill the buffer with silence and return
@@ -518,10 +521,16 @@ where
 
             for frame in data.chunks_mut(channels_val) {
                 //Always keep the final sample outputs as f32 but make the calculations using f64 so that we don't lose the signal.
-                let left_sample = ((2.0 * std::f64::consts::PI * f_left as f64 * *current_sample_clock_left / sample_rate_val).sin()) as f32;
+                let left_sample =
+                    ((2.0 * std::f64::consts::PI * f_left as f64 * *current_sample_clock_left
+                        / sample_rate_val)
+                        .sin()) as f32;
                 *current_sample_clock_left += 1.0;
 
-                let right_sample = ((2.0 * std::f64::consts::PI * f_right as f64 * *current_sample_clock_right / sample_rate_val).sin()) as f32;
+                let right_sample =
+                    ((2.0 * std::f64::consts::PI * f_right as f64 * *current_sample_clock_right
+                        / sample_rate_val)
+                        .sin()) as f32;
                 *current_sample_clock_right += 1.0;
 
                 if channels_val == 2 {
@@ -530,22 +539,16 @@ where
                 } else {
                     frame[0] = (left_sample + right_sample) * 0.25; // For mono, sum and reduce further
                 }
-
             }
         },
         |err| eprintln!("An error occurred on stream: {}", err),
-        None
+        None,
     )?;
 
     stream.play()?;
 
     // The main thread now waits for EITHER the timer to expire OR the cancel token to be set.
     wait_until_end(cancel_token, duration_minutes);
-    
+
     Ok(())
 }
-    
-
-
-
-
