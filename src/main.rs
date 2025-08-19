@@ -1,5 +1,5 @@
 extern crate cpal;
-use std::io;
+use crossterm::event::{self, Event, KeyCode, KeyEventKind};
 use std::sync::Arc;
 use std::sync::atomic::{AtomicBool, Ordering};
 
@@ -75,10 +75,10 @@ fn main() -> Result<(), Error> {
                 Ok(duration) => {
                     run_binaural_beat(binaural_preset, Duration::Custom(duration))?;
                 }
-                Err(_) => println!("There was an error choosing the duration, please try again."),
+                Err(_) => eprintln!("There was an error choosing the duration, please try again."),
             }
         }
-        Err(_) => println!("There was an error, please try again."),
+        Err(_) => eprintln!("There was an error, please try again."),
     }
 
     Ok(())
@@ -91,8 +91,19 @@ fn run_binaural_beat(preset_type: BinauralPreset, duration: Duration) -> Result<
     // 2. Start a separate thread to listen for user input
     std::thread::spawn(move || {
         println!("Press Enter to stop playback.");
-        let _ = io::stdin().read_line(&mut String::new());
-        cancel_token_clone.store(true, Ordering::Relaxed);
+        
+        loop {
+            match event::read()
+            {
+                Ok(Event::Key(key_event)) =>  {
+                    if key_event.kind == KeyEventKind::Press && key_event.code == KeyCode::Enter {
+                        cancel_token_clone.store(true, Ordering::Relaxed);
+                    }
+                },
+                Ok(_) => {}, // Ignore other events
+                Err(e) => eprintln!("There was an error, please try again. {}", e),
+            }
+        }
     });
 
     generate_binaural_beats(
