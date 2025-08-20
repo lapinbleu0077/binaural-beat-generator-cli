@@ -48,9 +48,9 @@ fn main() -> Result<(), Error> {
     ];
 
     let duration_options: Vec<u32> = vec![5, 10, 15, 20, 30, 35, 40, 50, 60];
-
+    let preset_length = preset_options.len();
     let chosen_preset = Select::new("Choose a preset: ", preset_options)
-        .with_page_size(20)
+        .with_page_size(preset_length)
         .prompt();
 
     match chosen_preset {
