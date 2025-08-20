@@ -4,8 +4,8 @@ use std::sync::Arc;
 use std::sync::atomic::{AtomicBool, Ordering};
 
 use anyhow::Error;
-use binaural_beat_generator::{BinauralPreset, Preset};
-use binaural_beat_generator::{Duration, ToMinutes, generate_binaural_beats};
+use binaural_beat_generator_cli::{BinauralPreset, Preset};
+use binaural_beat_generator_cli::{Duration, ToMinutes, generate_binaural_beats};
 
 use inquire::Select;
 
