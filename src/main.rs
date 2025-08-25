@@ -4,7 +4,7 @@ use std::sync::Arc;
 use std::sync::atomic::{AtomicBool, Ordering};
 
 use anyhow::Error;
-use binaural_beat_generator_cli::{BinauralPreset, Preset};
+use binaural_beat_generator_cli::{duration_list, preset_list, BinauralPreset};
 use binaural_beat_generator_cli::{Duration, ToMinutes, generate_binaural_beats};
 
 use inquire::Select;
@@ -12,42 +12,8 @@ use inquire::Select;
 // --- Main function to demonstrate usage ---
 
 fn main() -> Result<(), Error> {
-    let preset_options = vec![
-        Preset::Focus,
-        Preset::HighFocus,
-        Preset::Relaxation,
-        Preset::DeepRelaxation,
-        Preset::Sleep,
-        Preset::Chanting,
-        Preset::Intuition,
-        Preset::Astral,
-        Preset::Healing,
-        Preset::Alpha,
-        Preset::Intelligence,
-        Preset::Euphoria,
-        Preset::CrownFocus,
-        Preset::CrownRelaxation,
-        Preset::CrownSleep,
-        Preset::CrownChanting,
-        Preset::CrownIntuition,
-        Preset::CrownAstral,
-        Preset::SolfeggioRoot,
-        Preset::SolfeggioSacral,
-        Preset::SolfeggioSolarPlexus,
-        Preset::SolfeggioHeart,
-        Preset::SolfeggioThroat,
-        Preset::SolfeggioThirdEye,
-        Preset::SolfeggioCrown,
-        Preset::TuningForkRoot,
-        Preset::TuningForkSacral,
-        Preset::TuningForkSolarPlexus,
-        Preset::TuningForkHeart,
-        Preset::TuningForkThroat,
-        Preset::TuningForkThirdEye,
-        Preset::TuningForkCrown,
-    ];
-
-    let duration_options: Vec<u32> = vec![5, 10, 15, 20, 30, 35, 40, 50, 60];
+    let preset_options = preset_list();
+    let duration_options = duration_list();
     let preset_length = preset_options.len();
     let chosen_preset = Select::new("Choose a preset: ", preset_options)
         .with_page_size(preset_length)
