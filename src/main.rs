@@ -30,8 +30,7 @@ fn main() -> Result<(), Error> {
 
             let starting_duration_index = duration_options
                 .iter()
-                .position(|&x| x == binaural_preset.duration.to_minutes())
-                .unwrap_or(15);
+                .position(|&x| x == binaural_preset.duration).unwrap();
 
             let chosen_duration = Select::new("Choose a duration: ", duration_options)
                 .with_starting_cursor(starting_duration_index)
@@ -39,7 +38,7 @@ fn main() -> Result<(), Error> {
 
             match chosen_duration {
                 Ok(duration) => {
-                    run_binaural_beat(binaural_preset, Duration::Custom(duration))?;
+                    run_binaural_beat(binaural_preset, duration)?;
                 }
                 Err(_) => eprintln!("There was an error choosing the duration, please try again."),
             }

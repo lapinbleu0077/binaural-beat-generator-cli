@@ -122,15 +122,17 @@ impl ToFrequency for BeatFrequency {
 // --- 4. Define Enums for Duration ---
 
 /// Represents common durations in minutes.
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub enum Duration {
     FiveMinutes,
     TenMinutes,
     FifteenMinutes,
+    TwentyMinutes,
     ThirtyMinutes,
-    SixtyMinutes,
-    /// Allows specifying a custom duration in minutes.
-    Custom(u32),
+    ThirtyFiveMinutes,
+    FortyMinutes,
+    FiftyMinutes,
+    SixtyMinutes   
 }
 
 impl ToMinutes for Duration {
@@ -138,10 +140,13 @@ impl ToMinutes for Duration {
         match self {
             Duration::FiveMinutes => 5,
             Duration::TenMinutes => 10,
-            Duration::FifteenMinutes => 15,
+            Duration::FifteenMinutes => 15,           
+            Duration::TwentyMinutes => 20,
             Duration::ThirtyMinutes => 30,
-            Duration::SixtyMinutes => 60,
-            Duration::Custom(minutes) => *minutes,
+            Duration::ThirtyFiveMinutes => 35,
+            Duration::FortyMinutes => 40,
+            Duration::FiftyMinutes => 50,            
+            Duration::SixtyMinutes => 60
         }
     }
 }
@@ -368,6 +373,22 @@ impl From<Preset> for BinauralPreset {
     }
 }
 
+impl fmt::Display for Duration {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Duration::FiveMinutes => write!(f, "5 min"),
+            Duration::TenMinutes => write!(f, "10 min"),
+            Duration::FifteenMinutes => write!(f, "15 min"),
+            Duration::TwentyMinutes => write!(f, "20 min"),
+            Duration::ThirtyMinutes => write!(f, "30 min"),
+            Duration::ThirtyFiveMinutes => write!(f, "35 min"),
+            Duration::FortyMinutes => write!(f, "40 min"),
+            Duration::FiftyMinutes => write!(f, "50 min"),
+            Duration::SixtyMinutes => write!(f, "60 min"),
+        }
+    }
+}
+
 impl fmt::Display for Preset {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
@@ -462,8 +483,10 @@ pub fn preset_list() -> Vec<Preset> {
     ];
 }
 
-pub fn duration_list() -> Vec<u32> {
-    return vec![5, 10, 15, 20, 30, 35, 40, 50, 60];
+pub fn duration_list() -> Vec<Duration> {
+    return vec![Duration::FiveMinutes, Duration::TenMinutes, Duration::FifteenMinutes, 
+                Duration::TwentyMinutes, Duration::ThirtyMinutes, Duration::ThirtyFiveMinutes, 
+                Duration::FortyMinutes, Duration::FiftyMinutes, Duration::SixtyMinutes];
 }
 
 // --- 5. Generic Binaural Beat Generation Function ---
