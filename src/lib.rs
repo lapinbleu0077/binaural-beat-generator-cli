@@ -132,7 +132,7 @@ pub enum Duration {
     ThirtyFiveMinutes,
     FortyMinutes,
     FiftyMinutes,
-    SixtyMinutes   
+    SixtyMinutes,
 }
 
 impl ToMinutes for Duration {
@@ -140,13 +140,13 @@ impl ToMinutes for Duration {
         match self {
             Duration::FiveMinutes => 5,
             Duration::TenMinutes => 10,
-            Duration::FifteenMinutes => 15,           
+            Duration::FifteenMinutes => 15,
             Duration::TwentyMinutes => 20,
             Duration::ThirtyMinutes => 30,
             Duration::ThirtyFiveMinutes => 35,
             Duration::FortyMinutes => 40,
-            Duration::FiftyMinutes => 50,            
-            Duration::SixtyMinutes => 60
+            Duration::FiftyMinutes => 50,
+            Duration::SixtyMinutes => 60,
         }
     }
 }
@@ -445,7 +445,6 @@ fn wait_until_end(cancel_token: Arc<AtomicBool>, duration_minutes: u32) {
     }
 }
 
-
 pub fn preset_list() -> Vec<Preset> {
     return vec![
         Preset::Focus,
@@ -484,9 +483,17 @@ pub fn preset_list() -> Vec<Preset> {
 }
 
 pub fn duration_list() -> Vec<Duration> {
-    return vec![Duration::FiveMinutes, Duration::TenMinutes, Duration::FifteenMinutes, 
-                Duration::TwentyMinutes, Duration::ThirtyMinutes, Duration::ThirtyFiveMinutes, 
-                Duration::FortyMinutes, Duration::FiftyMinutes, Duration::SixtyMinutes];
+    return vec![
+        Duration::FiveMinutes,
+        Duration::TenMinutes,
+        Duration::FifteenMinutes,
+        Duration::TwentyMinutes,
+        Duration::ThirtyMinutes,
+        Duration::ThirtyFiveMinutes,
+        Duration::FortyMinutes,
+        Duration::FiftyMinutes,
+        Duration::SixtyMinutes,
+    ];
 }
 
 // --- 5. Generic Binaural Beat Generation Function ---

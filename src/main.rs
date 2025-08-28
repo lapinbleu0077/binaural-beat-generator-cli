@@ -4,7 +4,7 @@ use std::sync::Arc;
 use std::sync::atomic::{AtomicBool, Ordering};
 
 use anyhow::Error;
-use binaural_beat_generator_cli::{duration_list, preset_list, BinauralPreset};
+use binaural_beat_generator_cli::{BinauralPreset, duration_list, preset_list};
 use binaural_beat_generator_cli::{Duration, ToMinutes, generate_binaural_beats};
 
 use inquire::Select;
@@ -30,7 +30,8 @@ fn main() -> Result<(), Error> {
 
             let starting_duration_index = duration_options
                 .iter()
-                .position(|&x| x == binaural_preset.duration).unwrap();
+                .position(|&x| x == binaural_preset.duration)
+                .unwrap();
 
             let chosen_duration = Select::new("Choose a duration: ", duration_options)
                 .with_starting_cursor(starting_duration_index)
@@ -56,16 +57,15 @@ fn run_binaural_beat(preset_type: BinauralPreset, duration: Duration) -> Result<
     // 2. Start a separate thread to listen for user input
     std::thread::spawn(move || {
         println!("Press Enter to stop playback.");
-        
+
         loop {
-            match event::read()
-            {
-                Ok(Event::Key(key_event)) =>  {
+            match event::read() {
+                Ok(Event::Key(key_event)) => {
                     if key_event.kind == KeyEventKind::Press && key_event.code == KeyCode::Enter {
                         cancel_token_clone.store(true, Ordering::Relaxed);
                     }
-                },
-                Ok(_) => {}, // Ignore other events
+                }
+                Ok(_) => {} // Ignore other events
                 Err(e) => eprintln!("There was an error, please try again. {}", e),
             }
         }
