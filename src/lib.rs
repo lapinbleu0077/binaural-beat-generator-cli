@@ -109,11 +109,12 @@ pub enum BeatFrequency {
 impl ToFrequency for BeatFrequency {
     fn to_hz(&self) -> f32 {
         match self {
-            BeatFrequency::Delta => 2.0,  // Typical beat frequency for Delta
-            BeatFrequency::Theta => 6.0,  // Typical beat frequency for Theta
-            BeatFrequency::Alpha => 10.0, // Typical beat frequency for Alpha
-            BeatFrequency::Beta => 20.0,  // Typical beat frequency for Beta
-            BeatFrequency::Gamma => 40.0, // Typical beat frequency for Gamma
+            // Typical beat frequency for Delta, Theta, Alpha, Beta & Gamma
+            BeatFrequency::Delta => 2.0,
+            BeatFrequency::Theta => 6.0,
+            BeatFrequency::Alpha => 10.0,
+            BeatFrequency::Beta => 20.0,
+            BeatFrequency::Gamma => 40.0,
             BeatFrequency::Custom(hz) => *hz,
         }
     }
@@ -431,8 +432,6 @@ impl fmt::Display for Preset {
 fn wait_until_end(cancel_token: Arc<AtomicBool>, duration_minutes: u32) {
     let total_duration = StdDuration::from_secs((duration_minutes * 60) as u64);
     let start_time = Instant::now();
-
-    println!("Playing for a maximum of {} minutes...", duration_minutes);
 
     while start_time.elapsed() < total_duration {
         // Break the loop immediately if the user requested cancellation
