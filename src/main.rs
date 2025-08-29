@@ -4,10 +4,14 @@ use std::sync::Arc;
 use std::sync::atomic::{AtomicBool, Ordering};
 
 use anyhow::Error;
-use binaural_beat_generator_cli::{BinauralPreset, duration_list, preset_list};
-use binaural_beat_generator_cli::{Duration, ToMinutes, generate_binaural_beats};
-
 use inquire::Select;
+
+use crate::modules::bb_generator::generate_binaural_beats;
+use crate::modules::duration::duration::{Duration, duration_list};
+use crate::modules::duration::duration_common::ToMinutes;
+use crate::modules::preset::{BinauralPreset, preset_list};
+
+mod modules;
 
 // --- Main function to demonstrate usage ---
 
@@ -20,11 +24,11 @@ fn main() -> Result<(), Error> {
         .prompt();
 
     match chosen_preset {
-        Ok(choice) => {
-            let binaural_preset = BinauralPreset::from(choice);
+        Ok(preset) => {
+            let binaural_preset = BinauralPreset::from(preset);
             println!(
                 "You chose the preset : {} and it has duration of {}",
-                choice,
+                preset,
                 binaural_preset.duration.to_minutes()
             );
 

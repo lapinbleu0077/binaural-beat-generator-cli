@@ -1,0 +1,155 @@
+use anyhow::Error;
+use cpal::traits::{DeviceTrait, HostTrait, StreamTrait};
+use std::sync::{Arc, Mutex};
+use std::thread;
+use std::time::{Duration as StdDuration, Instant}; // Alias to avoid conflict with enum variant
+
+//Cancellation support
+use std::sync::atomic::{AtomicBool, Ordering};
+
+use crate::modules::duration::duration_common::ToMinutes;
+use crate::modules::frequency::frequency_common::ToFrequency;
+
+fn wait_until_end(cancel_token: Arc<AtomicBool>, duration_minutes: u32) {
+    let total_duration = StdDuration::from_secs((duration_minutes * 60) as u64);
+    let start_time = Instant::now();
+
+    while start_time.elapsed() < total_duration {
+        // Break the loop immediately if the user requested cancellation
+        if cancel_token.load(Ordering::Relaxed) {
+            println!("Playback cancelled by user.");
+            break;
+        }
+        // Sleep for a short period to avoid high CPU usage
+        thread::sleep(StdDuration::from_millis(500));
+    }
+}
+
+// --- 5. Generic Binaural Beat Generation Function ---
+
+/// Generates and plays binaural beat tones based on specified carrier frequency,
+/// beat frequency, and duration.
+///
+/// # Type Parameters
+/// - `C`: Type implementing `ToFrequency` for the carrier frequency.
+/// - `B`: Type implementing `ToFrequency` for the beat frequency.
+/// - `D`: Type implementing `ToMinutes` for the duration.
+///
+/// # Arguments
+/// - `carrier`: An instance of a type providing the carrier frequency.
+/// - `beat`: An instance of a type providing the beat frequency.
+/// - `duration`: An instance of a type providing the total duration.
+///
+/// # Returns
+/// `Result<(), anyhow::Error>` indicating success or failure.
+pub fn generate_binaural_beats<C, B, D>(
+    carrier: C,
+    beat: B,
+    duration: D,
+    cancel_token: Arc<AtomicBool>,
+) -> Result<(), Error>
+where
+    C: ToFrequency,
+    B: ToFrequency,
+    D: ToMinutes,
+{
+    // Extract concrete values from generic parameters
+    let carrier_hz = carrier.to_hz();
+    let beat_hz = beat.to_hz();
+    let duration_minutes = duration.to_minutes();
+
+    // Calculate left and right ear frequencies
+    let f_left = carrier_hz - (beat_hz / 2.0);
+    let f_right = carrier_hz + (beat_hz / 2.0);
+
+    // Basic validation for frequencies
+    if f_left <= 0.0 || f_right <= 0.0 {
+        return Err(anyhow::anyhow!(
+            "Calculated frequency for one ear is zero or negative. Adjust carrier or beat frequency."
+        ));
+    }
+    if duration_minutes == 0 {
+        return Err(anyhow::anyhow!(
+            "Duration must be greater than zero minutes."
+        ));
+    }
+
+    println!("--- Binaural Beat Settings ---");
+    println!("Carrier Frequency: {:.2} Hz", carrier_hz);
+    println!("Beat Frequency: {:.2} Hz", beat_hz);
+    println!("Left Ear Frequency: {:.2} Hz", f_left);
+    println!("Right Ear Frequency: {:.2} Hz", f_right);
+    println!("Duration: {} minutes", duration_minutes);
+    println!("----------------------------");
+
+    let host = cpal::default_host();
+
+    let device = host
+        .default_output_device()
+        .ok_or_else(|| anyhow::anyhow!("No output device available."))?;
+
+    let config = device.default_output_config()?;
+
+    let sample_rate_val = config.sample_rate().0 as f64;
+    let channels_val = config.channels() as usize;
+
+    let sample_clock_left = Arc::new(Mutex::new(0f64));
+    let sample_clock_right = Arc::new(Mutex::new(0f64));
+
+    let sample_clock_left_for_closure = Arc::clone(&sample_clock_left);
+    let sample_clock_right_for_closure = Arc::clone(&sample_clock_right);
+    let stream_cancel_token = Arc::clone(&cancel_token); // Clone for the stream closure
+
+    let stream = device.build_output_stream(
+        &config.clone().into(), // Clone config for the stream builder
+        move |data: &mut [f32], _: &cpal::OutputCallbackInfo| {
+            // Check the token's state inside the audio loop
+            if stream_cancel_token.load(Ordering::Relaxed) {
+                // If the token is true, fill the buffer with silence and return
+                for frame in data.chunks_mut(channels_val) {
+                    if channels_val == 2 {
+                        frame[0] = 0.0;
+                        frame[1] = 0.0;
+                    } else {
+                        frame[0] = 0.0;
+                    }
+                }
+                return;
+            }
+
+            let mut current_sample_clock_left = sample_clock_left_for_closure.lock().unwrap();
+            let mut current_sample_clock_right = sample_clock_right_for_closure.lock().unwrap();
+
+            for frame in data.chunks_mut(channels_val) {
+                //Always keep the final sample outputs as f32 but make the calculations using f64 so that we don't lose the signal.
+                let left_sample =
+                    ((2.0 * std::f64::consts::PI * f_left as f64 * *current_sample_clock_left
+                        / sample_rate_val)
+                        .sin()) as f32;
+                *current_sample_clock_left += 1.0;
+
+                let right_sample =
+                    ((2.0 * std::f64::consts::PI * f_right as f64 * *current_sample_clock_right
+                        / sample_rate_val)
+                        .sin()) as f32;
+                *current_sample_clock_right += 1.0;
+
+                if channels_val == 2 {
+                    frame[0] = left_sample * 0.5; // Reduce amplitude to avoid clipping
+                    frame[1] = right_sample * 0.5;
+                } else {
+                    frame[0] = (left_sample + right_sample) * 0.25; // For mono, sum and reduce further
+                }
+            }
+        },
+        |err| eprintln!("An error occurred on stream: {}", err),
+        None,
+    )?;
+
+    stream.play()?;
+
+    // The main thread now waits for EITHER the timer to expire OR the cancel token to be set.
+    wait_until_end(cancel_token, duration_minutes);
+
+    Ok(())
+}
