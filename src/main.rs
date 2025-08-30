@@ -1,5 +1,7 @@
 extern crate cpal;
+use colored::Colorize;
 use crossterm::event::{self, Event, KeyCode, KeyEventKind};
+use std::cmp;
 use std::sync::Arc;
 use std::sync::atomic::{AtomicBool, Ordering};
 
@@ -18,6 +20,9 @@ fn main() -> Result<(), Error> {
     let preset_options = preset_list();
     let duration_options = duration_list();
     let preset_length = preset_options.len();
+
+    print_program_info("Binaural Beat Generator","By Chris Horton");
+
     let chosen_preset = Select::new("Choose a preset: ", preset_options)
         .with_page_size(preset_length)
         .prompt();
@@ -77,4 +82,13 @@ fn run_binaural_beat(preset_options: BinauralPresetGroup) -> Result<(), Error> {
     )?;
 
     Ok(())
+}
+
+fn print_program_info(title : &str, author_text : &str) {
+    let max_chars = cmp::max(title.len(), author_text.len());
+    let separator = "=".repeat(max_chars + 10);
+    println!("{}",separator.blue());
+    println!("   {}   ", title.red().bold());
+    println!("   {}   ", author_text.red().bold().italic());
+    println!("{}",separator.blue());
 }
