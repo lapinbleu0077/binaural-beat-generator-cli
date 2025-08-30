@@ -1,0 +1,11 @@
+/mnt/LargeLocal/Development/RustProjects/binaural-beat-generator-cli/target/release/deps/convert_case-f585bbae17e51668.d: /home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/convert_case-0.7.1/src/lib.rs /home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/convert_case-0.7.1/src/boundary.rs /home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/convert_case-0.7.1/src/case.rs /home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/convert_case-0.7.1/src/converter.rs /home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/convert_case-0.7.1/src/pattern.rs
+
+/mnt/LargeLocal/Development/RustProjects/binaural-beat-generator-cli/target/release/deps/libconvert_case-f585bbae17e51668.rlib: /home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/convert_case-0.7.1/src/lib.rs /home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/convert_case-0.7.1/src/boundary.rs /home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/convert_case-0.7.1/src/case.rs /home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/convert_case-0.7.1/src/converter.rs /home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/convert_case-0.7.1/src/pattern.rs
+
+/mnt/LargeLocal/Development/RustProjects/binaural-beat-generator-cli/target/release/deps/libconvert_case-f585bbae17e51668.rmeta: /home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/convert_case-0.7.1/src/lib.rs /home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/convert_case-0.7.1/src/boundary.rs /home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/convert_case-0.7.1/src/case.rs /home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/convert_case-0.7.1/src/converter.rs /home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/convert_case-0.7.1/src/pattern.rs
+
+/home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/convert_case-0.7.1/src/lib.rs:
+/home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/convert_case-0.7.1/src/boundary.rs:
+/home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/convert_case-0.7.1/src/case.rs:
+/home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/convert_case-0.7.1/src/converter.rs:
+/home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/convert_case-0.7.1/src/pattern.rs:

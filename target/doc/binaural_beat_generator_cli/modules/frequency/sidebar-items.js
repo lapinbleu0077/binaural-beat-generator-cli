@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"mod":["beat_frequency","carrier_frequency","frequency_common"]};

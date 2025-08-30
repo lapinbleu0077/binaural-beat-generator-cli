@@ -1,0 +1,9 @@
+/mnt/LargeLocal/Development/RustProjects/binaural-beat-generator-cli/target/debug/deps/derive_more_impl-53ae19fddb43afe4.d: /home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/derive_more-impl-2.0.1/src/lib.rs /home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/derive_more-impl-2.0.1/src/utils.rs /home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/derive_more-impl-2.0.1/src/is_variant.rs /home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/derive_more-impl-2.0.1/src/../README.md /home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/derive_more-impl-2.0.1/src/../doc/is_variant.md
+
+/mnt/LargeLocal/Development/RustProjects/binaural-beat-generator-cli/target/debug/deps/libderive_more_impl-53ae19fddb43afe4.so: /home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/derive_more-impl-2.0.1/src/lib.rs /home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/derive_more-impl-2.0.1/src/utils.rs /home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/derive_more-impl-2.0.1/src/is_variant.rs /home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/derive_more-impl-2.0.1/src/../README.md /home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/derive_more-impl-2.0.1/src/../doc/is_variant.md
+
+/home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/derive_more-impl-2.0.1/src/lib.rs:
+/home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/derive_more-impl-2.0.1/src/utils.rs:
+/home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/derive_more-impl-2.0.1/src/is_variant.rs:
+/home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/derive_more-impl-2.0.1/src/../README.md:
+/home/chris/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/derive_more-impl-2.0.1/src/../doc/is_variant.md:
