@@ -35,6 +35,7 @@ impl fmt::Display for Duration {
     }
 }
 
+/// This implementation will convert the duration type of minutes into integer minutes.
 impl ToMinutes for Duration {
     fn to_minutes(&self) -> u32 {
         match self {
@@ -51,6 +52,7 @@ impl ToMinutes for Duration {
     }
 }
 
+/// This function will return the a vector list of all the supported durations.
 pub fn duration_list() -> Vec<Duration> {
     return vec![
         Duration::FiveMinutes,
