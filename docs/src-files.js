@@ -1,0 +1,2 @@
+createSrcSidebar('[["binaural_beat_generator_cli",["",[["modules",[["duration",[],["duration.rs","duration_common.rs","mod.rs"]],["frequency",[],["beat_frequency.rs","carrier_frequency.rs","frequency_common.rs","mod.rs"]]],["bb_generator.rs","mod.rs","preset.rs"]]],["main.rs"]]]]');
+//{"start":19,"fragment_lengths":[260]}

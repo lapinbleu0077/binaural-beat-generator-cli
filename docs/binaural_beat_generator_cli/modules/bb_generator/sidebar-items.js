@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["generate_binaural_beats","wait_until_end"]};
