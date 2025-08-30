@@ -19,41 +19,179 @@ pub struct BinauralPresetGroup {
 /// The preset enum allows the user to be able to select a preset to use on the command line.
 #[derive(Debug, Clone, Copy)]
 pub enum Preset {
-    // General presets
+    /// **Focus:**
+    /// A preset for heightened concentration and alertness, typically used
+    /// for studying or complex problem-solving. It utilizes Beta brainwaves
+    /// (12-30 Hz) which are associated with active thinking.
     Focus,
+
+    /// **High Focus:**
+    /// A more intense version of the `Focus` preset, pushing the mind to
+    /// higher levels of cognitive processing. It leverages Gamma brainwaves
+    /// (30-100 Hz), linked to peak concentration and intelligence.
     HighFocus,
+
+    /// **Relaxation:**
+    /// Promotes a state of calm alertness, ideal for unwinding after a
+    /// stressful day or for light meditation. This preset uses Alpha brainwaves
+    /// (8-12 Hz).
     Relaxation,
+
+    /// **Deep Relaxation:**
+    /// A deeper state of calm, bridging the gap between wakefulness and
+    /// sleep. It's often used for deep meditation or to prepare for rest.
+    /// This preset uses Theta brainwaves (4-8 Hz).
     DeepRelaxation,
+
+    /// **Sleep:**
+    /// Designed to induce a state of deep, restorative sleep. It utilizes
+    /// Delta brainwaves (0.5-4 Hz), which are associated with deep, dreamless sleep.
     Sleep,
+
+    /// **Chanting:**
+    /// A preset that mimics the meditative state achieved during chanting.
+    /// It helps to calm the mind and body using Theta brainwaves (4-8 Hz).
     Chanting,
+
+    /// **Intuition:**
+    /// This preset is designed to enhance intuition and insight by fostering
+    /// a Theta state, which is linked to creativity and subconscious processing.
     Intuition,
+
+    /// **Astral:**
+    /// An advanced preset aimed at assisting with out-of-body or astral projection
+    /// experiences. It combines a deep Theta beat with a Delta carrier to induce
+    /// a highly altered state of consciousness.
     Astral,
+
+    /// **Healing:**
+    /// This preset is thought to promote physical and mental healing by inducing
+    /// a deep Delta state, which is associated with the body's natural restorative
+    /// processes during sleep.
     Healing,
+
+    /// **Alpha:**
+    /// A preset that specifically targets the Alpha brainwave state (8-12 Hz)
+    /// to encourage a feeling of relaxed awareness and stress reduction.
     Alpha,
+
+    /// **Intelligence:**
+    /// This preset stimulates the brain for enhanced learning and cognitive function.
+    /// It primarily uses Gamma brainwaves (30-100 Hz), which are linked to
+    /// high-level information processing.
     Intelligence,
+
+    /// **Euphoria:**
+    /// A preset designed to promote feelings of happiness and well-being.
+    /// It utilizes a Gamma beat, which is often associated with endorphin
+    /// release and positive emotional states.
     Euphoria,
-    // Crown Chakra presets
+
+    // --- Chakra Presets ---
+
+    /// A group of presets designed to balance the seven main chakras. Each
+    /// preset combines a specific chakra's carrier frequency with a
+    /// binaural beat that induces a meditative or desired state.
+    ///
+    /// 
+
+    // --- Crown Chakra Presets ---
+    /// A collection of presets specifically targeting the Crown Chakra.
+    /// They combine the Crown Chakra's carrier frequency with different
+    /// mental states.
+
+    /// **Crown Focus:**
+    /// Combines the Crown Chakra's tuning fork frequency with a Beta beat
+    /// for focused meditation on spiritual connection.
     CrownFocus,
+    
+    /// **Crown Relaxation:**
+    /// Combines the Crown Chakra's tuning fork frequency with an Alpha beat
+    /// to promote a relaxed spiritual state.
     CrownRelaxation,
+    
+    /// **Crown Sleep:**
+    /// Combines the Crown Chakra's tuning fork frequency with a Delta beat
+    /// for deep rest and spiritual renewal.
     CrownSleep,
+    
+    /// **Crown Chanting:**
+    /// Combines the Crown Chakra's tuning fork frequency with a Theta beat
+    /// for a deeply meditative state during spiritual practices.
     CrownChanting,
+    
+    /// **Crown Intuition:**
+    /// Combines the Crown Chakra's tuning fork frequency with a Theta beat
+    /// to enhance intuition and cosmic awareness.
     CrownIntuition,
+    
+    /// **Crown Astral:**
+    /// Combines the Crown Chakra's tuning fork frequency with a Delta beat
+    /// for advanced meditation and astral exploration.
     CrownAstral,
-    // Solfeggio Chakra presets
+
+    // --- Solfeggio Chakra Presets ---
+    /// These presets use the ancient Solfeggio tones as the carrier frequency
+    /// for chakra balancing and meditation.
+    
+    /// **Solfeggio Root Chakra:**
+    /// Uses the 396 Hz Solfeggio tone with a Delta beat for grounding and stability.
     SolfeggioRoot,
+    
+    /// **Solfeggio Sacral Chakra:**
+    /// Uses the 417 Hz Solfeggio tone with a Theta beat for creativity and emotional release.
     SolfeggioSacral,
+    
+    /// **Solfeggio Solar Plexus Chakra:**
+    /// Uses the 528 Hz Solfeggio tone with an Alpha beat for transformation and motivation.
     SolfeggioSolarPlexus,
+    
+    /// **Solfeggio Heart Chakra:**
+    /// Uses the 639 Hz Solfeggio tone with an Alpha beat for love and connection.
     SolfeggioHeart,
+    
+    /// **Solfeggio Throat Chakra:**
+    /// Uses the 741 Hz Solfeggio tone with a Beta beat for communication and expression.
     SolfeggioThroat,
+    
+    /// **Solfeggio Third Eye Chakra:**
+    /// Uses the 852 Hz Solfeggio tone with a Beta beat for clarity and intuition.
     SolfeggioThirdEye,
+    
+    /// **Solfeggio Crown Chakra:**
+    /// Uses the 963 Hz Solfeggio tone with a Gamma beat for spiritual connection and unity.
     SolfeggioCrown,
-    // Tuning Fork Chakra presets
+
+    // --- Tuning Fork Chakra Presets ---
+    /// These presets use the Planetary/Tuning Fork frequencies as the
+    /// carrier frequency for chakra balancing.
+    
+    /// **Tuning Fork Root Chakra:**
+    /// Uses the 194.18 Hz Tuning Fork tone with a Delta beat for grounding.
     TuningForkRoot,
+    
+    /// **Tuning Fork Sacral Chakra:**
+    /// Uses the 210.42 Hz Tuning Fork tone with a Theta beat for emotional flow.
     TuningForkSacral,
+    
+    /// **Tuning Fork Solar Plexus Chakra:**
+    /// Uses the 126.22 Hz Tuning Fork tone with an Alpha beat for confidence.
     TuningForkSolarPlexus,
+    
+    /// **Tuning Fork Heart Chakra:**
+    /// Uses the 136.10 Hz Tuning Fork tone with an Alpha beat for love and compassion.
     TuningForkHeart,
+    
+    /// **Tuning Fork Throat Chakra:**
+    /// Uses the 141.27 Hz Tuning Fork tone with a Beta beat for communication.
     TuningForkThroat,
+    
+    /// **Tuning Fork Third Eye Chakra:**
+    /// Uses the 221.23 Hz Tuning Fork tone with a Beta beat for insight and wisdom.
     TuningForkThirdEye,
+    
+    /// **Tuning Fork Crown Chakra:**
+    /// Uses the 172.06 Hz Tuning Fork tone with a Gamma beat for spiritual transcendence.
     TuningForkCrown,
 }
 
