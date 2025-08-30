@@ -1,3 +1,8 @@
+//! This program allows for the user to be able to listen to binaural beat tones on their machine.
+//! ## Binaural beats is the idea that your brainwaves could be changed in a positive way by listening to slightly different tones in each ear.
+//! # Study suggests that binurial beats can help in stress relief, pain relief, anxiety relief as well as help in increased focus and so on.
+//! See the following for more info. [What Are Binaural Beats?](https://www.webmd.com/balance/what-are-binaural-beats)
+
 extern crate cpal;
 use colored::Colorize;
 use crossterm::event::{self, Event, KeyCode, KeyEventKind};
@@ -14,8 +19,7 @@ use crate::modules::preset::{BinauralPresetGroup, preset_list};
 
 mod modules;
 
-// --- Main function to demonstrate usage ---
-
+/// This is the entry point to the program. 
 fn main() -> Result<(), Error> {
     let preset_options = preset_list();
     let duration_options = duration_list();
@@ -55,6 +59,8 @@ fn main() -> Result<(), Error> {
     Ok(())
 }
 
+/// A helper funciton that sets off the running of the binaural beat tones.
+/// It also spawns a new thread in order to watch for early completion.
 fn run_binaural_beat(preset_options: BinauralPresetGroup) -> Result<(), Error> {
     let cancel_token = Arc::new(AtomicBool::new(false));
     let cancel_token_clone = Arc::clone(&cancel_token);
@@ -84,6 +90,7 @@ fn run_binaural_beat(preset_options: BinauralPresetGroup) -> Result<(), Error> {
     Ok(())
 }
 
+/// A helper function that just prints out the program name and author.
 fn print_program_info(title : &str, author_text : &str) {
     let max_chars = cmp::max(title.len(), author_text.len());
     let separator = "=".repeat(max_chars + 10);

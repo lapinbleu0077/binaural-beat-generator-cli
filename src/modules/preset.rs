@@ -1,3 +1,5 @@
+//! A module that contains code that allows for presets so that all settings can be easily used and passed around. 
+//! 
 use std::fmt;
 
 use crate::modules::{
@@ -5,6 +7,7 @@ use crate::modules::{
     frequency::{beat_frequency::BeatFrequency, carrier_frequency::CarrierFrequency},
 };
 
+/// This structure groups the basic values needed to run the binaural beat program.
 #[derive(Debug, Clone, Copy)]
 pub struct BinauralPresetGroup {
     pub preset : Preset,
@@ -13,7 +16,7 @@ pub struct BinauralPresetGroup {
     pub duration: Duration,
 }
 
-// The new Preset enum
+/// The preset enum allows the user to be able to select a preset to use on the command line.
 #[derive(Debug, Clone, Copy)]
 pub enum Preset {
     // General presets
@@ -54,6 +57,7 @@ pub enum Preset {
     TuningForkCrown,
 }
 
+/// The this implementation converts a preset to a preset group of values based on predetermined settings.
 impl From<Preset> for BinauralPresetGroup {
     fn from(preset: Preset) -> Self {
         match preset {
@@ -260,6 +264,7 @@ impl From<Preset> for BinauralPresetGroup {
     }
 }
 
+/// This implementation returns the human readable text name for for the preset enum.
 impl fmt::Display for Preset {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
@@ -299,6 +304,7 @@ impl fmt::Display for Preset {
     }
 }
 
+/// This function returns all of the presets used in a vector. 
 pub fn preset_list() -> Vec<Preset> {
     return vec![
         Preset::Focus,

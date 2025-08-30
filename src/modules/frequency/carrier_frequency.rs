@@ -1,4 +1,4 @@
-// --- 2. Define Enums for Carrier Frequency ---
+//! A module that contains code related to the carrier functionality.
 
 use crate::modules::frequency::frequency_common::ToFrequency;
 

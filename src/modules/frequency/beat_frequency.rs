@@ -1,3 +1,5 @@
+//! A module that contains code related to the beat functionality.
+
 use crate::modules::frequency::frequency_common::ToFrequency;
 
 /// Represents common brainwave beat frequencies.
@@ -17,6 +19,7 @@ pub enum BeatFrequency {
     Custom(f32),
 }
 
+/// This implementation conerts the BeatFrequency enum to a known or different and concrete frequency.
 impl ToFrequency for BeatFrequency {
     fn to_hz(&self) -> f32 {
         match self {

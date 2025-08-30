@@ -1,8 +1,8 @@
+//! A module that contains code related to the duration functionality.
+
 use std::fmt;
 
 use crate::modules::duration::duration_common::ToMinutes;
-
-// --- 4. Define Enums for Duration ---
 
 /// Represents common durations in minutes.
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -18,6 +18,7 @@ pub enum Duration {
     SixtyMinutes,
 }
 
+/// This formatter will return the number of minutes for the given duration enum.
 impl fmt::Display for Duration {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {

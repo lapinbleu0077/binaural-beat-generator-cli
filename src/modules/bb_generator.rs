@@ -1,3 +1,5 @@
+//! A module that contains the bulk of the code that allows the program to run.
+
 use anyhow::Error;
 use cpal::traits::{DeviceTrait, HostTrait, StreamTrait};
 use std::sync::{Arc, Mutex};
@@ -11,6 +13,9 @@ use crate::modules::duration::duration_common::ToMinutes;
 use crate::modules::frequency::frequency_common::ToFrequency;
 use crate::modules::preset::{BinauralPresetGroup};
 
+/// A function that wats for the chosen time limit to end before exiting. 
+/// The function will constantly check if the user wants to stop running of the program.
+/// 
 fn wait_until_end(cancel_token: Arc<AtomicBool>, duration_minutes: u32) {
     let total_duration = StdDuration::from_secs((duration_minutes * 60) as u64);
     let start_time = Instant::now();
@@ -26,20 +31,12 @@ fn wait_until_end(cancel_token: Arc<AtomicBool>, duration_minutes: u32) {
     }
 }
 
-// --- 5. Generic Binaural Beat Generation Function ---
-
 /// Generates and plays binaural beat tones based on specified carrier frequency,
 /// beat frequency, and duration.
 ///
-/// # Type Parameters
-/// - `C`: Type implementing `ToFrequency` for the carrier frequency.
-/// - `B`: Type implementing `ToFrequency` for the beat frequency.
-/// - `D`: Type implementing `ToMinutes` for the duration.
-///
 /// # Arguments
-/// - `carrier`: An instance of a type providing the carrier frequency.
-/// - `beat`: An instance of a type providing the beat frequency.
-/// - `duration`: An instance of a type providing the total duration.
+/// - `preset_options`: Specifies the binaural beat options choosen by the user to execute.
+/// - `cancel_token`: An atomic instance of a boolean that controls the stopping of the program before the timelimit.
 ///
 /// # Returns
 /// `Result<(), anyhow::Error>` indicating success or failure.
