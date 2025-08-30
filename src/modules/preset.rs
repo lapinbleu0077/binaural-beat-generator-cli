@@ -6,7 +6,8 @@ use crate::modules::{
 };
 
 #[derive(Debug, Clone, Copy)]
-pub struct BinauralPreset {
+pub struct BinauralPresetGroup {
+    pub preset : Preset,
     pub carrier: CarrierFrequency,
     pub beat: BeatFrequency,
     pub duration: Duration,
@@ -53,172 +54,204 @@ pub enum Preset {
     TuningForkCrown,
 }
 
-impl From<Preset> for BinauralPreset {
+impl From<Preset> for BinauralPresetGroup {
     fn from(preset: Preset) -> Self {
         match preset {
             // General Presets
-            Preset::Focus => BinauralPreset {
+            Preset::Focus => BinauralPresetGroup {
+                preset : preset,
                 carrier: CarrierFrequency::Beta,
                 beat: BeatFrequency::Beta,
                 duration: Duration::ThirtyMinutes,
             },
-            Preset::HighFocus => BinauralPreset {
+            Preset::HighFocus => BinauralPresetGroup {
+                preset : preset,
                 carrier: CarrierFrequency::Gamma,
                 beat: BeatFrequency::Gamma,
                 duration: Duration::ThirtyMinutes,
             },
-            Preset::Relaxation => BinauralPreset {
+            Preset::Relaxation => BinauralPresetGroup {
+                preset : preset,
                 carrier: CarrierFrequency::Alpha,
                 beat: BeatFrequency::Alpha,
                 duration: Duration::FifteenMinutes,
             },
-            Preset::DeepRelaxation => BinauralPreset {
+            Preset::DeepRelaxation => BinauralPresetGroup {
+                preset : preset,
                 carrier: CarrierFrequency::Theta,
                 beat: BeatFrequency::Theta,
                 duration: Duration::FifteenMinutes,
             },
-            Preset::Sleep => BinauralPreset {
+            Preset::Sleep => BinauralPresetGroup {
+                preset : preset,
                 carrier: CarrierFrequency::Delta,
                 beat: BeatFrequency::Delta,
                 duration: Duration::SixtyMinutes,
             },
-            Preset::Chanting => BinauralPreset {
+            Preset::Chanting => BinauralPresetGroup {
+                preset : preset,
                 carrier: CarrierFrequency::Theta,
                 beat: BeatFrequency::Theta,
                 duration: Duration::ThirtyMinutes,
             },
-            Preset::Intuition => BinauralPreset {
+            Preset::Intuition => BinauralPresetGroup {
+                preset : preset,
                 carrier: CarrierFrequency::Theta,
                 beat: BeatFrequency::Theta,
                 duration: Duration::FifteenMinutes,
             },
-            Preset::Astral => BinauralPreset {
+            Preset::Astral => BinauralPresetGroup {
+                preset : preset,
                 carrier: CarrierFrequency::Custom(140.0),
                 beat: BeatFrequency::Custom(6.3),
                 duration: Duration::SixtyMinutes,
             },
-            Preset::Healing => BinauralPreset {
+            Preset::Healing => BinauralPresetGroup {
+                preset : preset,
                 carrier: CarrierFrequency::Delta,
                 beat: BeatFrequency::Theta,
                 duration: Duration::SixtyMinutes,
             },
-            Preset::Alpha => BinauralPreset {
+            Preset::Alpha => BinauralPresetGroup {
+                preset : preset,
                 carrier: CarrierFrequency::Alpha,
                 beat: BeatFrequency::Alpha,
                 duration: Duration::ThirtyMinutes,
             },
-            Preset::Intelligence => BinauralPreset {
+            Preset::Intelligence => BinauralPresetGroup {
+                preset : preset,
                 carrier: CarrierFrequency::Gamma,
                 beat: BeatFrequency::Gamma,
                 duration: Duration::TenMinutes,
             },
-            Preset::Euphoria => BinauralPreset {
+            Preset::Euphoria => BinauralPresetGroup {
+                preset : preset,
                 carrier: CarrierFrequency::Custom(210.42),
                 beat: BeatFrequency::Custom(20.0),
                 duration: Duration::TenMinutes,
             },
 
             // Crown Chakra Presets
-            Preset::CrownFocus => BinauralPreset {
+            Preset::CrownFocus => BinauralPresetGroup {
+                preset : preset,
                 carrier: CarrierFrequency::TuningForkCrown,
                 beat: BeatFrequency::Beta,
                 duration: Duration::ThirtyMinutes,
             },
-            Preset::CrownRelaxation => BinauralPreset {
+            Preset::CrownRelaxation => BinauralPresetGroup {
+                preset : preset,
                 carrier: CarrierFrequency::TuningForkCrown,
                 beat: BeatFrequency::Alpha,
                 duration: Duration::FifteenMinutes,
             },
-            Preset::CrownSleep => BinauralPreset {
+            Preset::CrownSleep => BinauralPresetGroup {
+                preset : preset,
                 carrier: CarrierFrequency::TuningForkCrown,
                 beat: BeatFrequency::Delta,
                 duration: Duration::SixtyMinutes,
             },
-            Preset::CrownChanting => BinauralPreset {
+            Preset::CrownChanting => BinauralPresetGroup {
+                preset : preset,
                 carrier: CarrierFrequency::TuningForkCrown,
                 beat: BeatFrequency::Theta,
                 duration: Duration::ThirtyMinutes,
             },
-            Preset::CrownIntuition => BinauralPreset {
+            Preset::CrownIntuition => BinauralPresetGroup {
+                preset : preset,
                 carrier: CarrierFrequency::TuningForkCrown,
                 beat: BeatFrequency::Theta,
                 duration: Duration::FifteenMinutes,
             },
-            Preset::CrownAstral => BinauralPreset {
+            Preset::CrownAstral => BinauralPresetGroup {
+                preset : preset,
                 carrier: CarrierFrequency::TuningForkCrown,
                 beat: BeatFrequency::Delta,
                 duration: Duration::SixtyMinutes,
             },
 
             // Solfeggio Chakra Presets
-            Preset::SolfeggioRoot => BinauralPreset {
+            Preset::SolfeggioRoot => BinauralPresetGroup {
+                preset : preset,
                 carrier: CarrierFrequency::SolfeggioRoot,
                 beat: BeatFrequency::Delta,
                 duration: Duration::ThirtyMinutes,
             },
-            Preset::SolfeggioSacral => BinauralPreset {
+            Preset::SolfeggioSacral => BinauralPresetGroup {
+                preset : preset,
                 carrier: CarrierFrequency::SolfeggioSacral,
                 beat: BeatFrequency::Theta,
                 duration: Duration::ThirtyMinutes,
             },
-            Preset::SolfeggioSolarPlexus => BinauralPreset {
+            Preset::SolfeggioSolarPlexus => BinauralPresetGroup {
+                preset : preset,
                 carrier: CarrierFrequency::SolfeggioSolarPlexus,
                 beat: BeatFrequency::Alpha,
                 duration: Duration::ThirtyMinutes,
             },
-            Preset::SolfeggioHeart => BinauralPreset {
+            Preset::SolfeggioHeart => BinauralPresetGroup {
+                preset : preset,
                 carrier: CarrierFrequency::SolfeggioHeart,
                 beat: BeatFrequency::Alpha,
                 duration: Duration::FifteenMinutes,
             },
-            Preset::SolfeggioThroat => BinauralPreset {
+            Preset::SolfeggioThroat => BinauralPresetGroup {
+                preset : preset,
                 carrier: CarrierFrequency::SolfeggioThroat,
                 beat: BeatFrequency::Beta,
                 duration: Duration::TenMinutes,
             },
-            Preset::SolfeggioThirdEye => BinauralPreset {
+            Preset::SolfeggioThirdEye => BinauralPresetGroup {
+                preset : preset,
                 carrier: CarrierFrequency::SolfeggioThirdEye,
                 beat: BeatFrequency::Beta,
                 duration: Duration::TenMinutes,
             },
-            Preset::SolfeggioCrown => BinauralPreset {
+            Preset::SolfeggioCrown => BinauralPresetGroup {
+                preset : preset,
                 carrier: CarrierFrequency::SolfeggioCrown,
                 beat: BeatFrequency::Gamma,
                 duration: Duration::TenMinutes,
             },
 
             // Tuning Fork Chakra Presets
-            Preset::TuningForkRoot => BinauralPreset {
+            Preset::TuningForkRoot => BinauralPresetGroup {
+                preset : preset,
                 carrier: CarrierFrequency::TuningForkRoot,
                 beat: BeatFrequency::Delta,
                 duration: Duration::ThirtyMinutes,
             },
-            Preset::TuningForkSacral => BinauralPreset {
+            Preset::TuningForkSacral => BinauralPresetGroup {
+                preset : preset,
                 carrier: CarrierFrequency::TuningForkSacral,
                 beat: BeatFrequency::Theta,
                 duration: Duration::ThirtyMinutes,
             },
-            Preset::TuningForkSolarPlexus => BinauralPreset {
+            Preset::TuningForkSolarPlexus => BinauralPresetGroup {
+                preset : preset,
                 carrier: CarrierFrequency::TuningForkSolarPlexus,
                 beat: BeatFrequency::Alpha,
                 duration: Duration::ThirtyMinutes,
             },
-            Preset::TuningForkHeart => BinauralPreset {
+            Preset::TuningForkHeart => BinauralPresetGroup {
+                preset : preset,
                 carrier: CarrierFrequency::TuningForkHeart,
                 beat: BeatFrequency::Alpha,
                 duration: Duration::FifteenMinutes,
             },
-            Preset::TuningForkThroat => BinauralPreset {
+            Preset::TuningForkThroat => BinauralPresetGroup {
+                preset : preset,
                 carrier: CarrierFrequency::TuningForkThroat,
                 beat: BeatFrequency::Beta,
                 duration: Duration::TenMinutes,
             },
-            Preset::TuningForkThirdEye => BinauralPreset {
+            Preset::TuningForkThirdEye => BinauralPresetGroup {
+                preset : preset,
                 carrier: CarrierFrequency::TuningForkThirdEye,
                 beat: BeatFrequency::Beta,
                 duration: Duration::TenMinutes,
             },
-            Preset::TuningForkCrown => BinauralPreset {
+            Preset::TuningForkCrown => BinauralPresetGroup {
+                preset : preset,
                 carrier: CarrierFrequency::TuningForkCrown,
                 beat: BeatFrequency::Gamma,
                 duration: Duration::TenMinutes,

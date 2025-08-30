@@ -7,9 +7,8 @@ use anyhow::Error;
 use inquire::Select;
 
 use crate::modules::bb_generator::generate_binaural_beats;
-use crate::modules::duration::duration::{Duration, duration_list};
-use crate::modules::duration::duration_common::ToMinutes;
-use crate::modules::preset::{BinauralPreset, preset_list};
+use crate::modules::duration::duration::{duration_list};
+use crate::modules::preset::{BinauralPresetGroup, preset_list};
 
 mod modules;
 
@@ -25,16 +24,11 @@ fn main() -> Result<(), Error> {
 
     match chosen_preset {
         Ok(preset) => {
-            let binaural_preset = BinauralPreset::from(preset);
-            println!(
-                "You chose the preset : {} and it has duration of {}",
-                preset,
-                binaural_preset.duration.to_minutes()
-            );
+            let mut binaural_preset_options = BinauralPresetGroup::from(preset);
 
             let starting_duration_index = duration_options
                 .iter()
-                .position(|&x| x == binaural_preset.duration)
+                .position(|&x| x == binaural_preset_options.duration)
                 .unwrap();
 
             let chosen_duration = Select::new("Choose a duration: ", duration_options)
@@ -43,18 +37,20 @@ fn main() -> Result<(), Error> {
 
             match chosen_duration {
                 Ok(duration) => {
-                    run_binaural_beat(binaural_preset, duration)?;
+                    //Get the chosen duration if it has changed.
+                    binaural_preset_options.duration = duration;
+                    run_binaural_beat(binaural_preset_options)?;
                 }
-                Err(_) => eprintln!("There was an error choosing the duration, please try again."),
+                Err(err) => eprintln!("There was an error choosing the duration, please try again. {}", err),
             }
         }
-        Err(_) => eprintln!("There was an error, please try again."),
+        Err(err) => eprintln!("There was an error, please try again. {}", err),
     }
 
     Ok(())
 }
 
-fn run_binaural_beat(preset_type: BinauralPreset, duration: Duration) -> Result<(), Error> {
+fn run_binaural_beat(preset_options: BinauralPresetGroup) -> Result<(), Error> {
     let cancel_token = Arc::new(AtomicBool::new(false));
     let cancel_token_clone = Arc::clone(&cancel_token);
 
@@ -70,15 +66,13 @@ fn run_binaural_beat(preset_type: BinauralPreset, duration: Duration) -> Result<
                     }
                 }
                 Ok(_) => {} // Ignore other events
-                Err(e) => eprintln!("There was an error, please try again. {}", e),
+                Err(err) => eprintln!("There was an error, please try again. {}", err),
             }
         }
     });
 
     generate_binaural_beats(
-        preset_type.carrier,
-        preset_type.beat,
-        duration,
+        preset_options,
         Arc::clone(&cancel_token),
     )?;
 

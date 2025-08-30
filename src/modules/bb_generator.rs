@@ -9,6 +9,7 @@ use std::sync::atomic::{AtomicBool, Ordering};
 
 use crate::modules::duration::duration_common::ToMinutes;
 use crate::modules::frequency::frequency_common::ToFrequency;
+use crate::modules::preset::{BinauralPresetGroup};
 
 fn wait_until_end(cancel_token: Arc<AtomicBool>, duration_minutes: u32) {
     let total_duration = StdDuration::from_secs((duration_minutes * 60) as u64);
@@ -42,21 +43,15 @@ fn wait_until_end(cancel_token: Arc<AtomicBool>, duration_minutes: u32) {
 ///
 /// # Returns
 /// `Result<(), anyhow::Error>` indicating success or failure.
-pub fn generate_binaural_beats<C, B, D>(
-    carrier: C,
-    beat: B,
-    duration: D,
+pub fn generate_binaural_beats(
+    preset_options : BinauralPresetGroup,
     cancel_token: Arc<AtomicBool>,
 ) -> Result<(), Error>
-where
-    C: ToFrequency,
-    B: ToFrequency,
-    D: ToMinutes,
 {
     // Extract concrete values from generic parameters
-    let carrier_hz = carrier.to_hz();
-    let beat_hz = beat.to_hz();
-    let duration_minutes = duration.to_minutes();
+    let carrier_hz = preset_options.carrier.to_hz();
+    let beat_hz = preset_options.beat.to_hz();
+    let duration_minutes = preset_options.duration.to_minutes();
 
     // Calculate left and right ear frequencies
     let f_left = carrier_hz - (beat_hz / 2.0);
@@ -75,6 +70,7 @@ where
     }
 
     println!("--- Binaural Beat Settings ---");
+    println!("Preset {}", preset_options.preset);
     println!("Carrier Frequency: {:.2} Hz", carrier_hz);
     println!("Beat Frequency: {:.2} Hz", beat_hz);
     println!("Left Ear Frequency: {:.2} Hz", f_left);
