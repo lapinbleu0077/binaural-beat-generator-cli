@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["main","print_program_info","run_binaural_beat"],"mod":["modules"]};
