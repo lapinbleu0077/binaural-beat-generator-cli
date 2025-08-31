@@ -479,3 +479,72 @@ pub fn preset_list() -> Vec<Preset> {
         Preset::TuningForkCrown,
     ];
 }
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    macro_rules! test_carrier_frequency_to_integer_cases {
+        ($($name:ident:($a:expr, $expected:expr),)*) => {
+            $(
+                #[test]
+                fn $name() {
+                    assert_eq!(CarrierFrequency::to_hz($a),$expected)
+                }
+            )*
+        };
+    }
+
+     macro_rules! test_preset_enum_to_text_description_cases {
+        ($($name:ident:($a:expr, $expected:expr),)*) => {
+            $(
+                #[test]
+                fn $name() {
+                    assert_eq!($a,$expected)
+                }
+            )*
+        };
+    }
+
+    #[test]
+    fn test_preset_list_length() {
+        let lst = preset_list();
+        assert_eq!(32,lst.len())
+    }
+
+    test_preset_enum_to_text_description_cases ! {
+        preset_text_focus: (Preset::Focus.to_string(), "Focus"),
+        preset_text_high_focus: (Preset::HighFocus.to_string(), "High Focus"),
+        preset_text_relaxation: (Preset::Relaxation.to_string(), "Relaxation"),
+        preset_text_deep_relaxation: (Preset::DeepRelaxation.to_string(), "Deep Relaxation"),
+        preset_text_sleep: (Preset::Sleep.to_string(), "Sleep"),
+        preset_text_chanting: (Preset::Chanting.to_string(), "Chanting"),
+        preset_text_intuition: (Preset::Intuition.to_string(), "Intuition"),
+        preset_text_astral: (Preset::Astral.to_string(), "Astral"),
+        preset_text_healing: (Preset::Healing.to_string(), "Healing"),
+        preset_text_alpha: (Preset::Alpha.to_string(), "Alpha"),
+        preset_text_intelligence: (Preset::Intelligence.to_string(), "Intelligence"),
+        preset_text_euphoria: (Preset::Euphoria.to_string(), "Euphoria"),
+        preset_text_crown_chakra_focus: (Preset::CrownFocus.to_string(), "Crown Chakra Focus"),
+        preset_text_crown_relaxation: (Preset::CrownRelaxation.to_string(), "Crown Chakra Relaxation"),
+        preset_text_crown_sleep: (Preset::CrownSleep.to_string(), "Crown Chakra Sleep"),
+        preset_text_crown_chanting: (Preset::CrownChanting.to_string(), "Crown Chakra Chanting"),
+        preset_text_crown_intuition: (Preset::CrownIntuition.to_string(), "Crown Chakra Intuition"),
+        preset_text_crown_astral: (Preset::CrownAstral.to_string(), "Crown Chakra Astral"),
+        preset_text_solfeggio_root: (Preset::SolfeggioRoot.to_string(), "Solfeggio Root Chakra"),
+        preset_text_solfeggio_sacral: (Preset::SolfeggioSacral.to_string(), "Solfeggio Sacral Chakra"),
+        preset_text_solfeggio_solar_plexus: (Preset::SolfeggioSolarPlexus.to_string(), "Solfeggio Solar Plexus Chakra"),
+        preset_text_solfeggio_heart: (Preset::SolfeggioHeart.to_string(), "Solfeggio Heart Chakra"),
+        preset_text_solfeggio_throat: (Preset::SolfeggioThroat.to_string(), "Solfeggio Throat Chakra"),
+        preset_text_solfeggio_third_eye: (Preset::SolfeggioThirdEye.to_string(), "Solfeggio Third Eye Chakra"),
+        preset_text_solfeggio_crown: (Preset::SolfeggioCrown.to_string(), "Solfeggio Crown Chakra"),
+        preset_text_tuning_fork_root: (Preset::TuningForkRoot.to_string(), "Tuning Fork Root Chakra"),
+        preset_text_tuning_fork_sacral: (Preset::TuningForkSacral.to_string(), "Tuning Fork Sacral Chakra"),
+        preset_text_tuning_fork_solar_plexus: (Preset::TuningForkSolarPlexus.to_string(), "Tuning Fork Solar Plexus Chakra"),
+        preset_text_tuning_fork_heart: (Preset::TuningForkHeart.to_string(), "Tuning Fork Heart Chakra"),
+        preset_text_tuning_fork_throat: (Preset::TuningForkThroat.to_string(), "Tuning Fork Throat Chakra"),
+        preset_text_tuning_fork_third_eye: (Preset::TuningForkThirdEye.to_string(), "Tuning Fork Third Eye Chakra"),
+        preset_text_tuning_fork_crown: (Preset::TuningForkCrown.to_string(), "Tuning Fork Crown Chakra"),
+    }
+
+}
