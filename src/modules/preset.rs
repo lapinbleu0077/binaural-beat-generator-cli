@@ -8,7 +8,7 @@ use crate::modules::{
 };
 
 /// This structure groups the basic values needed to run the binaural beat program.
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub struct BinauralPresetGroup {
     pub preset: Preset,
     pub carrier: CarrierFrequency,
@@ -17,7 +17,7 @@ pub struct BinauralPresetGroup {
 }
 
 /// The preset enum allows the user to be able to select a preset to use on the command line.
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub enum Preset {
     /// **Focus:**
     /// A preset for heightened concentration and alertness, typically used
@@ -88,12 +88,11 @@ pub enum Preset {
     Euphoria,
 
     // --- Chakra Presets ---
-
     /// A group of presets designed to balance the seven main chakras. Each
     /// preset combines a specific chakra's carrier frequency with a
     /// binaural beat that induces a meditative or desired state.
     ///
-    /// 
+    ///
 
     // --- Crown Chakra Presets ---
     /// A collection of presets specifically targeting the Crown Chakra.
@@ -104,27 +103,27 @@ pub enum Preset {
     /// Combines the Crown Chakra's tuning fork frequency with a Beta beat
     /// for focused meditation on spiritual connection.
     CrownFocus,
-    
+
     /// **Crown Relaxation:**
     /// Combines the Crown Chakra's tuning fork frequency with an Alpha beat
     /// to promote a relaxed spiritual state.
     CrownRelaxation,
-    
+
     /// **Crown Sleep:**
     /// Combines the Crown Chakra's tuning fork frequency with a Delta beat
     /// for deep rest and spiritual renewal.
     CrownSleep,
-    
+
     /// **Crown Chanting:**
     /// Combines the Crown Chakra's tuning fork frequency with a Theta beat
     /// for a deeply meditative state during spiritual practices.
     CrownChanting,
-    
+
     /// **Crown Intuition:**
     /// Combines the Crown Chakra's tuning fork frequency with a Theta beat
     /// to enhance intuition and cosmic awareness.
     CrownIntuition,
-    
+
     /// **Crown Astral:**
     /// Combines the Crown Chakra's tuning fork frequency with a Delta beat
     /// for advanced meditation and astral exploration.
@@ -133,31 +132,31 @@ pub enum Preset {
     // --- Solfeggio Chakra Presets ---
     /// These presets use the ancient Solfeggio tones as the carrier frequency
     /// for chakra balancing and meditation.
-    
+
     /// **Solfeggio Root Chakra:**
     /// Uses the 396 Hz Solfeggio tone with a Delta beat for grounding and stability.
     SolfeggioRoot,
-    
+
     /// **Solfeggio Sacral Chakra:**
     /// Uses the 417 Hz Solfeggio tone with a Theta beat for creativity and emotional release.
     SolfeggioSacral,
-    
+
     /// **Solfeggio Solar Plexus Chakra:**
     /// Uses the 528 Hz Solfeggio tone with an Alpha beat for transformation and motivation.
     SolfeggioSolarPlexus,
-    
+
     /// **Solfeggio Heart Chakra:**
     /// Uses the 639 Hz Solfeggio tone with an Alpha beat for love and connection.
     SolfeggioHeart,
-    
+
     /// **Solfeggio Throat Chakra:**
     /// Uses the 741 Hz Solfeggio tone with a Beta beat for communication and expression.
     SolfeggioThroat,
-    
+
     /// **Solfeggio Third Eye Chakra:**
     /// Uses the 852 Hz Solfeggio tone with a Beta beat for clarity and intuition.
     SolfeggioThirdEye,
-    
+
     /// **Solfeggio Crown Chakra:**
     /// Uses the 963 Hz Solfeggio tone with a Gamma beat for spiritual connection and unity.
     SolfeggioCrown,
@@ -165,31 +164,31 @@ pub enum Preset {
     // --- Tuning Fork Chakra Presets ---
     /// These presets use the Planetary/Tuning Fork frequencies as the
     /// carrier frequency for chakra balancing.
-    
+
     /// **Tuning Fork Root Chakra:**
     /// Uses the 194.18 Hz Tuning Fork tone with a Delta beat for grounding.
     TuningForkRoot,
-    
+
     /// **Tuning Fork Sacral Chakra:**
     /// Uses the 210.42 Hz Tuning Fork tone with a Theta beat for emotional flow.
     TuningForkSacral,
-    
+
     /// **Tuning Fork Solar Plexus Chakra:**
     /// Uses the 126.22 Hz Tuning Fork tone with an Alpha beat for confidence.
     TuningForkSolarPlexus,
-    
+
     /// **Tuning Fork Heart Chakra:**
     /// Uses the 136.10 Hz Tuning Fork tone with an Alpha beat for love and compassion.
     TuningForkHeart,
-    
+
     /// **Tuning Fork Throat Chakra:**
     /// Uses the 141.27 Hz Tuning Fork tone with a Beta beat for communication.
     TuningForkThroat,
-    
+
     /// **Tuning Fork Third Eye Chakra:**
     /// Uses the 221.23 Hz Tuning Fork tone with a Beta beat for insight and wisdom.
     TuningForkThirdEye,
-    
+
     /// **Tuning Fork Crown Chakra:**
     /// Uses the 172.06 Hz Tuning Fork tone with a Gamma beat for spiritual transcendence.
     TuningForkCrown,
@@ -484,18 +483,18 @@ pub fn preset_list() -> Vec<Preset> {
 mod test {
     use super::*;
 
-    macro_rules! test_carrier_frequency_to_integer_cases {
+    macro_rules! test_preset_enum_to_binaural_preset_group_cases {
         ($($name:ident:($a:expr, $expected:expr),)*) => {
             $(
                 #[test]
                 fn $name() {
-                    assert_eq!(CarrierFrequency::to_hz($a),$expected)
+                    assert_eq!(BinauralPresetGroup::from($a),$expected)
                 }
             )*
         };
     }
 
-     macro_rules! test_preset_enum_to_text_description_cases {
+    macro_rules! test_preset_enum_to_text_description_cases {
         ($($name:ident:($a:expr, $expected:expr),)*) => {
             $(
                 #[test]
@@ -509,10 +508,10 @@ mod test {
     #[test]
     fn test_preset_list_length() {
         let lst = preset_list();
-        assert_eq!(32,lst.len())
+        assert_eq!(32, lst.len())
     }
 
-    test_preset_enum_to_text_description_cases ! {
+    test_preset_enum_to_text_description_cases! {
         preset_text_focus: (Preset::Focus.to_string(), "Focus"),
         preset_text_high_focus: (Preset::HighFocus.to_string(), "High Focus"),
         preset_text_relaxation: (Preset::Relaxation.to_string(), "Relaxation"),
@@ -547,4 +546,201 @@ mod test {
         preset_text_tuning_fork_crown: (Preset::TuningForkCrown.to_string(), "Tuning Fork Crown Chakra"),
     }
 
+    test_preset_enum_to_binaural_preset_group_cases! {
+        preset_focus_to_preset_group : (Preset::Focus, BinauralPresetGroup {
+                    preset: Preset::Focus,
+                    carrier: CarrierFrequency::Beta,
+                    beat: BeatFrequency::Beta,
+                    duration: Duration::ThirtyMinutes,
+                }),
+        preset_high_focus_to_preset_group : (Preset::HighFocus, BinauralPresetGroup {
+                    preset: Preset::HighFocus,
+                    carrier: CarrierFrequency::Gamma,
+                    beat: BeatFrequency::Gamma,
+                    duration: Duration::ThirtyMinutes,
+                }),
+    preset_relaxation_to_preset_group : (Preset::Relaxation, BinauralPresetGroup {
+        preset: Preset::Relaxation,
+        carrier: CarrierFrequency::Alpha,
+        beat: BeatFrequency::Alpha,
+        duration: Duration::FifteenMinutes,
+    }),
+    preset_deep_relaxation_to_preset_group : (Preset::DeepRelaxation, BinauralPresetGroup {
+        preset: Preset::DeepRelaxation,
+        carrier: CarrierFrequency::Theta,
+        beat: BeatFrequency::Theta,
+        duration: Duration::FifteenMinutes,
+    }),
+    preset_sleep_to_preset_group : (Preset::Sleep, BinauralPresetGroup {
+        preset: Preset::Sleep,
+        carrier: CarrierFrequency::Delta,
+        beat: BeatFrequency::Delta,
+        duration: Duration::SixtyMinutes,
+    }),
+    preset_chanting_to_preset_group : (Preset::Chanting, BinauralPresetGroup {
+        preset: Preset::Chanting,
+        carrier: CarrierFrequency::Theta,
+        beat: BeatFrequency::Theta,
+        duration: Duration::ThirtyMinutes,
+    }),
+    preset_intuition_to_preset_group : (Preset::Intuition, BinauralPresetGroup {
+        preset: Preset::Intuition,
+        carrier: CarrierFrequency::Theta,
+        beat: BeatFrequency::Theta,
+        duration: Duration::FifteenMinutes,
+    }),
+    preset_astral_to_preset_group : (Preset::Astral, BinauralPresetGroup {
+        preset: Preset::Astral,
+        carrier: CarrierFrequency::Custom(140.0),
+        beat: BeatFrequency::Custom(6.3),
+        duration: Duration::SixtyMinutes,
+    }),
+    preset_healing_to_preset_group : (Preset::Healing, BinauralPresetGroup {
+        preset: Preset::Healing,
+        carrier: CarrierFrequency::Delta,
+        beat: BeatFrequency::Theta,
+        duration: Duration::SixtyMinutes,
+    }),
+    preset_alpha_to_preset_group : (Preset::Alpha, BinauralPresetGroup {
+        preset: Preset::Alpha,
+        carrier: CarrierFrequency::Alpha,
+        beat: BeatFrequency::Alpha,
+        duration: Duration::ThirtyMinutes,
+    }),
+    preset_intelligence_to_preset_group : (Preset::Intelligence, BinauralPresetGroup {
+        preset: Preset::Intelligence,
+        carrier: CarrierFrequency::Gamma,
+        beat: BeatFrequency::Gamma,
+        duration: Duration::TenMinutes,
+    }),
+    preset_euphoria_to_preset_group : (Preset::Euphoria, BinauralPresetGroup {
+        preset: Preset::Euphoria,
+        carrier: CarrierFrequency::Custom(210.42),
+        beat: BeatFrequency::Custom(20.0),
+        duration: Duration::TenMinutes,
+    }),
+
+    preset_crown_focus_to_preset_group : (Preset::CrownFocus, BinauralPresetGroup {
+        preset: Preset::CrownFocus,
+        carrier: CarrierFrequency::TuningForkCrown,
+        beat: BeatFrequency::Beta,
+        duration: Duration::ThirtyMinutes,
+    }),
+    preset_crown_relaxation_to_preset_group : (Preset::CrownRelaxation, BinauralPresetGroup {
+        preset: Preset::CrownRelaxation,
+        carrier: CarrierFrequency::TuningForkCrown,
+        beat: BeatFrequency::Alpha,
+        duration: Duration::FifteenMinutes,
+    }),
+    preset_crown_sleep_to_preset_group : (Preset::CrownSleep, BinauralPresetGroup {
+        preset: Preset::CrownSleep,
+        carrier: CarrierFrequency::TuningForkCrown,
+        beat: BeatFrequency::Delta,
+        duration: Duration::SixtyMinutes,
+    }),
+    preset_crown_chanting_to_preset_group : (Preset::CrownChanting, BinauralPresetGroup {
+        preset: Preset::CrownChanting,
+        carrier: CarrierFrequency::TuningForkCrown,
+        beat: BeatFrequency::Theta,
+        duration: Duration::ThirtyMinutes,
+    }),
+    preset_crown_intuition_to_preset_group : (Preset::CrownIntuition, BinauralPresetGroup {
+        preset: Preset::CrownIntuition,
+        carrier: CarrierFrequency::TuningForkCrown,
+        beat: BeatFrequency::Theta,
+        duration: Duration::FifteenMinutes,
+    }),
+    preset_crown_astral_to_preset_group : (Preset::CrownAstral, BinauralPresetGroup {
+        preset: Preset::CrownAstral,
+        carrier: CarrierFrequency::TuningForkCrown,
+        beat: BeatFrequency::Delta,
+        duration: Duration::SixtyMinutes,
+    }),
+
+    preset_solfeggio_root_to_preset_group : (Preset::SolfeggioRoot, BinauralPresetGroup {
+        preset: Preset::SolfeggioRoot,
+        carrier: CarrierFrequency::SolfeggioRoot,
+        beat: BeatFrequency::Delta,
+        duration: Duration::ThirtyMinutes,
+    }),
+    preset_solfeggio_sacral_to_preset_group : (Preset::SolfeggioSacral, BinauralPresetGroup {
+        preset: Preset::SolfeggioSacral,
+        carrier: CarrierFrequency::SolfeggioSacral,
+        beat: BeatFrequency::Theta,
+        duration: Duration::ThirtyMinutes,
+    }),
+    preset_solfeggio_solar_plexus_to_preset_group : (Preset::SolfeggioSolarPlexus, BinauralPresetGroup {
+        preset: Preset::SolfeggioSolarPlexus,
+        carrier: CarrierFrequency::SolfeggioSolarPlexus,
+        beat: BeatFrequency::Alpha,
+        duration: Duration::ThirtyMinutes,
+    }),
+    preset_solfeggio_heart_to_preset_group : (Preset::SolfeggioHeart, BinauralPresetGroup {
+        preset: Preset::SolfeggioHeart,
+        carrier: CarrierFrequency::SolfeggioHeart,
+        beat: BeatFrequency::Alpha,
+        duration: Duration::FifteenMinutes,
+    }),
+    preset_solfeggio_throat_to_preset_group : (Preset::SolfeggioThroat, BinauralPresetGroup {
+        preset: Preset::SolfeggioThroat,
+        carrier: CarrierFrequency::SolfeggioThroat,
+        beat: BeatFrequency::Beta,
+        duration: Duration::TenMinutes,
+    }),
+    preset_solfeggio_third_eye_to_preset_group : (Preset::SolfeggioThirdEye, BinauralPresetGroup {
+        preset: Preset::SolfeggioThirdEye,
+        carrier: CarrierFrequency::SolfeggioThirdEye,
+        beat: BeatFrequency::Beta,
+        duration: Duration::TenMinutes,
+    }),
+    preset_solfeggio_crown_to_preset_group : (Preset::SolfeggioCrown, BinauralPresetGroup {
+        preset: Preset::SolfeggioCrown,
+        carrier: CarrierFrequency::SolfeggioCrown,
+        beat: BeatFrequency::Gamma,
+        duration: Duration::TenMinutes,
+    }),
+
+    preset_tuning_fork_root_to_preset_group : (Preset::TuningForkRoot, BinauralPresetGroup {
+        preset: Preset::TuningForkRoot,
+        carrier: CarrierFrequency::TuningForkRoot,
+        beat: BeatFrequency::Delta,
+        duration: Duration::ThirtyMinutes,
+    }),
+    preset_tuning_fork_sacral_to_preset_group : (Preset::TuningForkSacral, BinauralPresetGroup {
+        preset: Preset::TuningForkSacral,
+        carrier: CarrierFrequency::TuningForkSacral,
+        beat: BeatFrequency::Theta,
+        duration: Duration::ThirtyMinutes,
+    }),
+    preset_tuning_fork_solar_plexus_to_preset_group : (Preset::TuningForkSolarPlexus, BinauralPresetGroup {
+        preset: Preset::TuningForkSolarPlexus,
+        carrier: CarrierFrequency::TuningForkSolarPlexus,
+        beat: BeatFrequency::Alpha,
+        duration: Duration::ThirtyMinutes,
+    }),
+    preset_tuning_fork_heart_to_preset_group : (Preset::TuningForkHeart, BinauralPresetGroup {
+        preset: Preset::TuningForkHeart,
+        carrier: CarrierFrequency::TuningForkHeart,
+        beat: BeatFrequency::Alpha,
+        duration: Duration::FifteenMinutes,
+    }),
+    preset_tuning_fork_throat_to_preset_group : (Preset::TuningForkThroat, BinauralPresetGroup {
+        preset: Preset::TuningForkThroat,
+        carrier: CarrierFrequency::TuningForkThroat,
+        beat: BeatFrequency::Beta,
+        duration: Duration::TenMinutes,
+    }),
+    preset_tuning_fork_third_eye_to_preset_group : (Preset::TuningForkThirdEye, BinauralPresetGroup {
+        preset: Preset::TuningForkThirdEye,
+        carrier: CarrierFrequency::TuningForkThirdEye,
+        beat: BeatFrequency::Beta,
+        duration: Duration::TenMinutes,
+    }),
+    preset_tuning_fork_crown_to_preset_group : (Preset::TuningForkCrown, BinauralPresetGroup {
+        preset: Preset::TuningForkCrown,
+        carrier: CarrierFrequency::TuningForkCrown,
+        beat: BeatFrequency::Gamma,
+        duration: Duration::TenMinutes,
+    }),
+        }
 }

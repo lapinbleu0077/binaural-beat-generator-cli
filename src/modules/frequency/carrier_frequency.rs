@@ -3,7 +3,7 @@
 use crate::modules::frequency::frequency_common::ToFrequency;
 
 /// Represents common brainwave carrier frequencies.
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq)]
 pub enum CarrierFrequency {
     /// Delta wave range (0.5 - 4 Hz), often associated with deep sleep.
     Delta,
