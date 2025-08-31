@@ -66,3 +66,61 @@ pub fn duration_list() -> Vec<Duration> {
         Duration::SixtyMinutes,
     ];
 }
+
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    macro_rules! test_duration_enum_to_integer_minutes_cases {
+        ($($name:ident:($a:expr, $expected:expr),)*) => {
+            $(
+                #[test]
+                fn $name() {
+                    assert_eq!(Duration::to_minutes($a),$expected)
+                }
+            )*
+        };
+    }
+
+    macro_rules! test_duration_enum_to_text_minutes_cases {
+        ($($name:ident:($a:expr, $expected:expr),)*) => {
+            $(
+                #[test]
+                fn $name() {
+                    assert_eq!($a,$expected)
+                }
+            )*
+        };
+    }
+
+    #[test]
+    fn duration_list_length() {
+        let lst = duration_list();
+        assert_eq!(9,lst.len())
+    }
+
+    test_duration_enum_to_integer_minutes_cases! {
+        five_minutes_integer: (&Duration::FiveMinutes,5),
+        ten_minutes_integer: (&Duration::TenMinutes,10),
+        fifteen_minutes_integer: (&Duration::FifteenMinutes,15),
+        twenty_minutes_integer: (&Duration::TwentyMinutes,20),
+        thirty_minutes_integer: (&Duration::ThirtyMinutes,30),
+        thirtyfive_minutes_integer: (&Duration::ThirtyFiveMinutes,35),
+        forty_minutes_integer: (&Duration::FortyMinutes,40),
+        fifty_minutes_integer: (&Duration::FiftyMinutes,50),
+        sixty_minutes_integer: (&Duration::SixtyMinutes,60),
+    }
+
+    test_duration_enum_to_text_minutes_cases! {
+        five_minutes_text: (Duration::FiveMinutes.to_string(),"5 min"),
+        ten_minutes_text: (Duration::TenMinutes.to_string(),"10 min"),
+        fifteen_minutes_text: (Duration::FifteenMinutes.to_string(),"15 min"),
+        twenty_minutes_text: (Duration::TwentyMinutes.to_string(),"20 min"),
+        thirty_minutes_text: (Duration::ThirtyMinutes.to_string(),"30 min"),
+        thirtyfive_minutes_text: (Duration::ThirtyFiveMinutes.to_string(),"35 min"),
+        forty_minutes_text: (Duration::FortyMinutes.to_string(),"40 min"),
+        fifty_minutes_text: (Duration::FiftyMinutes.to_string(),"50 min"),
+        sixty_minutes_text: (Duration::SixtyMinutes.to_string(),"60 min"),
+    }
+}
