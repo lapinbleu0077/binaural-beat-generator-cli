@@ -33,3 +33,29 @@ impl ToFrequency for BeatFrequency {
         }
     }
 }
+
+
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    macro_rules! test_beat_frequency_to_integer_cases {
+        ($($name:ident:($a:expr, $expected:expr),)*) => {
+            $(
+                #[test]
+                fn $name() {
+                    assert_eq!(BeatFrequency::to_hz($a),$expected)
+                }
+            )*
+        };
+    }
+
+    test_beat_frequency_to_integer_cases! {
+        test_beat_freuency_delta_enum_to_integer: (&BeatFrequency::Delta, 2.0),
+        test_beat_freuency_theta_enum_to_integer: (&BeatFrequency::Theta, 6.0),
+        test_beat_freuency_alpha_enum_to_integer: (&BeatFrequency::Alpha, 10.0),
+        test_beat_freuency_beta_enum_to_integer: (&BeatFrequency::Beta, 20.0),
+        test_beat_freuency_gamma_enum_to_integer: (&BeatFrequency::Gamma, 40.0),
+        test_beat_freuency_custom_enum_to_integer: (&BeatFrequency::Custom(99.9), 99.9),
+    }
+}
