@@ -68,8 +68,6 @@ impl ToFrequency for CarrierFrequency {
     }
 }
 
-
-
 #[cfg(test)]
 mod test {
     use super::*;
@@ -91,7 +89,7 @@ mod test {
         test_carrier_frequency_alpha_enum_to_integer: (&CarrierFrequency::Alpha , 300.0),
         test_carrier_frequency_beta_enum_to_integer: (&CarrierFrequency::Beta , 400.0),
         test_carrier_frequency_gamma_enum_to_integer: (&CarrierFrequency::Gamma , 500.0),
-        
+
         test_carrier_frequency_solfeggio_root_enum_to_integer: (&CarrierFrequency::SolfeggioRoot , 396.0),
         test_carrier_frequency_solfeggio_sacral_enum_to_integer: (&CarrierFrequency::SolfeggioSacral , 417.0),
         test_carrier_frequency_solfeggio_solar_plexus_enum_to_integer: (&CarrierFrequency::SolfeggioSolarPlexus , 528.0),
@@ -99,7 +97,7 @@ mod test {
         test_carrier_frequency_solfeggio_throat_enum_to_integer: (&CarrierFrequency::SolfeggioThroat , 741.0),
         test_carrier_frequency_solfeggio_third_eye_enum_to_integer: (&CarrierFrequency::SolfeggioThirdEye , 852.0),
         test_carrier_frequency_solfeggio_crown_enum_to_integer: (&CarrierFrequency::SolfeggioCrown , 963.0),
-        
+
         test_carrier_frequency_tuning_fork_root_enum_to_integer: (&CarrierFrequency::TuningForkRoot , 194.18),
         test_carrier_frequency_tuning_fork_sacral_enum_to_integer: (&CarrierFrequency::TuningForkSacral , 210.42),
         test_carrier_frequency_tuning_fork_solar_plexus_enum_to_integer: (&CarrierFrequency::TuningForkSolarPlexus , 126.22),

@@ -14,18 +14,18 @@ use anyhow::Error;
 use inquire::Select;
 
 use crate::modules::bb_generator::generate_binaural_beats;
-use crate::modules::duration::duration::{duration_list};
+use crate::modules::duration::duration::duration_list;
 use crate::modules::preset::{BinauralPresetGroup, preset_list};
 
 mod modules;
 
-/// This is the entry point to the program. 
+/// This is the entry point to the program.
 fn main() -> Result<(), Error> {
     let preset_options = preset_list();
     let duration_options = duration_list();
     let preset_length = preset_options.len();
 
-    print_program_info("Binaural Beat Generator","By Chris Horton");
+    print_program_info("Binaural Beat Generator", "By Chris Horton");
 
     let chosen_preset = Select::new("Choose a preset: ", preset_options)
         .with_page_size(preset_length)
@@ -50,7 +50,10 @@ fn main() -> Result<(), Error> {
                     binaural_preset_options.duration = duration;
                     run_binaural_beat(binaural_preset_options)?;
                 }
-                Err(err) => eprintln!("There was an error choosing the duration, please try again. {}", err),
+                Err(err) => eprintln!(
+                    "There was an error choosing the duration, please try again. {}",
+                    err
+                ),
             }
         }
         Err(err) => eprintln!("There was an error, please try again. {}", err),
@@ -82,20 +85,17 @@ fn run_binaural_beat(preset_options: BinauralPresetGroup) -> Result<(), Error> {
         }
     });
 
-    generate_binaural_beats(
-        preset_options,
-        Arc::clone(&cancel_token),
-    )?;
+    generate_binaural_beats(preset_options, Arc::clone(&cancel_token))?;
 
     Ok(())
 }
 
 /// A helper function that just prints out the program name and author.
-fn print_program_info(title : &str, author_text : &str) {
+fn print_program_info(title: &str, author_text: &str) {
     let max_chars = cmp::max(title.len(), author_text.len());
     let separator = "=".repeat(max_chars + 10);
-    println!("{}",separator.blue());
+    println!("{}", separator.blue());
     println!("   {}   ", title.red().bold());
     println!("   {}   ", author_text.red().bold().italic());
-    println!("{}",separator.blue());
+    println!("{}", separator.blue());
 }

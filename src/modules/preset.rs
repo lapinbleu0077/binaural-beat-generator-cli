@@ -504,11 +504,91 @@ mod test {
             )*
         };
     }
+    #[test]
+    fn preset_list_has_exact_items() {
+        let existing_list = preset_list();
+        let expected_list = vec![
+            Preset::Focus,
+            Preset::HighFocus,
+            Preset::Relaxation,
+            Preset::DeepRelaxation,
+            Preset::Sleep,
+            Preset::Chanting,
+            Preset::Intuition,
+            Preset::Astral,
+            Preset::Healing,
+            Preset::Alpha,
+            Preset::Intelligence,
+            Preset::Euphoria,
+            Preset::CrownFocus,
+            Preset::CrownRelaxation,
+            Preset::CrownSleep,
+            Preset::CrownChanting,
+            Preset::CrownIntuition,
+            Preset::CrownAstral,
+            Preset::SolfeggioRoot,
+            Preset::SolfeggioSacral,
+            Preset::SolfeggioSolarPlexus,
+            Preset::SolfeggioHeart,
+            Preset::SolfeggioThroat,
+            Preset::SolfeggioThirdEye,
+            Preset::SolfeggioCrown,
+            Preset::TuningForkRoot,
+            Preset::TuningForkSacral,
+            Preset::TuningForkSolarPlexus,
+            Preset::TuningForkHeart,
+            Preset::TuningForkThroat,
+            Preset::TuningForkThirdEye,
+            Preset::TuningForkCrown,
+        ];
+
+        assert_eq!(existing_list, expected_list);
+    }
 
     #[test]
-    fn test_preset_list_length() {
-        let lst = preset_list();
-        assert_eq!(32, lst.len())
+    fn preset_list_has_expected_sequence_for_items() {
+        let existing_list = preset_list();
+        let expected_list = vec![
+            Preset::Focus,
+            Preset::HighFocus,
+            Preset::Relaxation,
+            Preset::DeepRelaxation,
+            Preset::Sleep,
+            Preset::Chanting,
+            Preset::Intuition,
+            Preset::Astral,
+            Preset::Healing,
+            Preset::Alpha,
+            Preset::Intelligence,
+            Preset::Euphoria,
+            Preset::CrownFocus,
+            Preset::CrownRelaxation,
+            Preset::CrownSleep,
+            Preset::CrownChanting,
+            Preset::CrownIntuition,
+            Preset::CrownAstral,
+            Preset::SolfeggioRoot,
+            Preset::SolfeggioSacral,
+            Preset::SolfeggioSolarPlexus,
+            Preset::SolfeggioHeart,
+            Preset::SolfeggioThroat,
+            Preset::SolfeggioThirdEye,
+            Preset::SolfeggioCrown,
+            Preset::TuningForkRoot,
+            Preset::TuningForkSacral,
+            Preset::TuningForkSolarPlexus,
+            Preset::TuningForkHeart,
+            Preset::TuningForkThroat,
+            Preset::TuningForkThirdEye,
+            Preset::TuningForkCrown,
+        ];
+
+        assert_eq!(existing_list.len(), expected_list.len());
+
+        for (index, existing_value) in existing_list.iter().enumerate() {
+            let expected_entry = expected_list.get(index).unwrap();
+            assert_eq!(existing_value, expected_entry);
+        }
     }
 
     test_preset_enum_to_text_description_cases! {

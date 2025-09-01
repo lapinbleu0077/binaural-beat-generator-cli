@@ -67,7 +67,6 @@ pub fn duration_list() -> Vec<Duration> {
     ];
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -95,9 +94,44 @@ mod tests {
     }
 
     #[test]
-    fn duration_list_length() {
-        let lst = duration_list();
-        assert_eq!(9,lst.len())
+    fn duration_list_has_exact_items() {
+        let existing_list = duration_list();
+        let expected_list = vec![
+            Duration::FiveMinutes,
+            Duration::TenMinutes,
+            Duration::FifteenMinutes,
+            Duration::TwentyMinutes,
+            Duration::ThirtyMinutes,
+            Duration::ThirtyFiveMinutes,
+            Duration::FortyMinutes,
+            Duration::FiftyMinutes,
+            Duration::SixtyMinutes,
+        ];
+
+        assert_eq!(existing_list, expected_list);
+    }
+
+    #[test]
+    fn duration_list_has_expected_sequence_for_items() {
+        let existing_list = duration_list();
+        let expected_list = vec![
+            Duration::FiveMinutes,
+            Duration::TenMinutes,
+            Duration::FifteenMinutes,
+            Duration::TwentyMinutes,
+            Duration::ThirtyMinutes,
+            Duration::ThirtyFiveMinutes,
+            Duration::FortyMinutes,
+            Duration::FiftyMinutes,
+            Duration::SixtyMinutes,
+        ];
+
+        assert_eq!(existing_list.len(), expected_list.len());
+
+        for (index, existing_value) in existing_list.iter().enumerate() {
+            let expected_entry = expected_list.get(index).unwrap();
+            assert_eq!(existing_value, expected_entry);
+        }
     }
 
     test_duration_enum_to_integer_minutes_cases! {

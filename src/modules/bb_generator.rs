@@ -11,11 +11,11 @@ use std::sync::atomic::{AtomicBool, Ordering};
 
 use crate::modules::duration::duration_common::ToMinutes;
 use crate::modules::frequency::frequency_common::ToFrequency;
-use crate::modules::preset::{BinauralPresetGroup};
+use crate::modules::preset::BinauralPresetGroup;
 
-/// A function that wats for the chosen time limit to end before exiting. 
+/// A function that wats for the chosen time limit to end before exiting.
 /// The function will constantly check if the user wants to stop running of the program.
-/// 
+///
 fn wait_until_end(cancel_token: Arc<AtomicBool>, duration_minutes: u32) {
     let total_duration = StdDuration::from_secs((duration_minutes * 60) as u64);
     let start_time = Instant::now();
@@ -41,10 +41,9 @@ fn wait_until_end(cancel_token: Arc<AtomicBool>, duration_minutes: u32) {
 /// # Returns
 /// `Result<(), anyhow::Error>` indicating success or failure.
 pub fn generate_binaural_beats(
-    preset_options : BinauralPresetGroup,
+    preset_options: BinauralPresetGroup,
     cancel_token: Arc<AtomicBool>,
-) -> Result<(), Error>
-{
+) -> Result<(), Error> {
     // Extract concrete values from generic parameters
     let carrier_hz = preset_options.carrier.to_hz();
     let beat_hz = preset_options.beat.to_hz();

@@ -34,7 +34,6 @@ impl ToFrequency for BeatFrequency {
     }
 }
 
-
 #[cfg(test)]
 mod test {
     use super::*;
