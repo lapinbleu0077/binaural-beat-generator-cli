@@ -14,18 +14,18 @@
 <a href=#14 id=14 data-nosnippet>14</a><span class="kw">use </span>inquire::Select;
 <a href=#15 id=15 data-nosnippet>15</a>
 <a href=#16 id=16 data-nosnippet>16</a><span class="kw">use </span><span class="kw">crate</span>::modules::bb_generator::generate_binaural_beats;
-<a href=#17 id=17 data-nosnippet>17</a><span class="kw">use </span><span class="kw">crate</span>::modules::duration::duration::{duration_list};
+<a href=#17 id=17 data-nosnippet>17</a><span class="kw">use </span><span class="kw">crate</span>::modules::duration::duration::duration_list;
 <a href=#18 id=18 data-nosnippet>18</a><span class="kw">use </span><span class="kw">crate</span>::modules::preset::{BinauralPresetGroup, preset_list};
 <a href=#19 id=19 data-nosnippet>19</a>
 <a href=#20 id=20 data-nosnippet>20</a><span class="kw">mod </span>modules;
 <a href=#21 id=21 data-nosnippet>21</a>
-<a href=#22 id=22 data-nosnippet>22</a><span class="doccomment">/// This is the entry point to the program. 
+<a href=#22 id=22 data-nosnippet>22</a><span class="doccomment">/// This is the entry point to the program.
 <a href=#23 id=23 data-nosnippet>23</a></span><span class="kw">fn </span>main() -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
 <a href=#24 id=24 data-nosnippet>24</a>    <span class="kw">let </span>preset_options = preset_list();
 <a href=#25 id=25 data-nosnippet>25</a>    <span class="kw">let </span>duration_options = duration_list();
 <a href=#26 id=26 data-nosnippet>26</a>    <span class="kw">let </span>preset_length = preset_options.len();
 <a href=#27 id=27 data-nosnippet>27</a>
-<a href=#28 id=28 data-nosnippet>28</a>    print_program_info(<span class="string">"Binaural Beat Generator"</span>,<span class="string">"By Chris Horton"</span>);
+<a href=#28 id=28 data-nosnippet>28</a>    print_program_info(<span class="string">"Binaural Beat Generator"</span>, <span class="string">"By Chris Horton"</span>);
 <a href=#29 id=29 data-nosnippet>29</a>
 <a href=#30 id=30 data-nosnippet>30</a>    <span class="kw">let </span>chosen_preset = Select::new(<span class="string">"Choose a preset: "</span>, preset_options)
 <a href=#31 id=31 data-nosnippet>31</a>        .with_page_size(preset_length)
@@ -50,52 +50,52 @@
 <a href=#50 id=50 data-nosnippet>50</a>                    </span>binaural_preset_options.duration = duration;
 <a href=#51 id=51 data-nosnippet>51</a>                    run_binaural_beat(binaural_preset_options)<span class="question-mark">?</span>;
 <a href=#52 id=52 data-nosnippet>52</a>                }
-<a href=#53 id=53 data-nosnippet>53</a>                <span class="prelude-val">Err</span>(err) =&gt; <span class="macro">eprintln!</span>(<span class="string">"There was an error choosing the duration, please try again. {}"</span>, err),
-<a href=#54 id=54 data-nosnippet>54</a>            }
-<a href=#55 id=55 data-nosnippet>55</a>        }
-<a href=#56 id=56 data-nosnippet>56</a>        <span class="prelude-val">Err</span>(err) =&gt; <span class="macro">eprintln!</span>(<span class="string">"There was an error, please try again. {}"</span>, err),
-<a href=#57 id=57 data-nosnippet>57</a>    }
-<a href=#58 id=58 data-nosnippet>58</a>
-<a href=#59 id=59 data-nosnippet>59</a>    <span class="prelude-val">Ok</span>(())
-<a href=#60 id=60 data-nosnippet>60</a>}
+<a href=#53 id=53 data-nosnippet>53</a>                <span class="prelude-val">Err</span>(err) =&gt; <span class="macro">eprintln!</span>(
+<a href=#54 id=54 data-nosnippet>54</a>                    <span class="string">"There was an error choosing the duration, please try again. {}"</span>,
+<a href=#55 id=55 data-nosnippet>55</a>                    err
+<a href=#56 id=56 data-nosnippet>56</a>                ),
+<a href=#57 id=57 data-nosnippet>57</a>            }
+<a href=#58 id=58 data-nosnippet>58</a>        }
+<a href=#59 id=59 data-nosnippet>59</a>        <span class="prelude-val">Err</span>(err) =&gt; <span class="macro">eprintln!</span>(<span class="string">"There was an error, please try again. {}"</span>, err),
+<a href=#60 id=60 data-nosnippet>60</a>    }
 <a href=#61 id=61 data-nosnippet>61</a>
-<a href=#62 id=62 data-nosnippet>62</a><span class="doccomment">/// A helper funciton that sets off the running of the binaural beat tones.
-<a href=#63 id=63 data-nosnippet>63</a>/// It also spawns a new thread in order to watch for early completion.
-<a href=#64 id=64 data-nosnippet>64</a></span><span class="kw">fn </span>run_binaural_beat(preset_options: BinauralPresetGroup) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
-<a href=#65 id=65 data-nosnippet>65</a>    <span class="kw">let </span>cancel_token = Arc::new(AtomicBool::new(<span class="bool-val">false</span>));
-<a href=#66 id=66 data-nosnippet>66</a>    <span class="kw">let </span>cancel_token_clone = Arc::clone(<span class="kw-2">&amp;</span>cancel_token);
-<a href=#67 id=67 data-nosnippet>67</a>
-<a href=#68 id=68 data-nosnippet>68</a>    <span class="comment">// 2. Start a separate thread to listen for user input
-<a href=#69 id=69 data-nosnippet>69</a>    </span>std::thread::spawn(<span class="kw">move </span>|| {
-<a href=#70 id=70 data-nosnippet>70</a>        <span class="macro">println!</span>(<span class="string">"Press Enter to stop playback."</span>);
-<a href=#71 id=71 data-nosnippet>71</a>
-<a href=#72 id=72 data-nosnippet>72</a>        <span class="kw">loop </span>{
-<a href=#73 id=73 data-nosnippet>73</a>            <span class="kw">match </span>event::read() {
-<a href=#74 id=74 data-nosnippet>74</a>                <span class="prelude-val">Ok</span>(Event::Key(key_event)) =&gt; {
-<a href=#75 id=75 data-nosnippet>75</a>                    <span class="kw">if </span>key_event.kind == KeyEventKind::Press &amp;&amp; key_event.code == KeyCode::Enter {
-<a href=#76 id=76 data-nosnippet>76</a>                        cancel_token_clone.store(<span class="bool-val">true</span>, Ordering::Relaxed);
-<a href=#77 id=77 data-nosnippet>77</a>                    }
-<a href=#78 id=78 data-nosnippet>78</a>                }
-<a href=#79 id=79 data-nosnippet>79</a>                <span class="prelude-val">Ok</span>(<span class="kw">_</span>) =&gt; {} <span class="comment">// Ignore other events
-<a href=#80 id=80 data-nosnippet>80</a>                </span><span class="prelude-val">Err</span>(err) =&gt; <span class="macro">eprintln!</span>(<span class="string">"There was an error, please try again. {}"</span>, err),
-<a href=#81 id=81 data-nosnippet>81</a>            }
-<a href=#82 id=82 data-nosnippet>82</a>        }
-<a href=#83 id=83 data-nosnippet>83</a>    });
-<a href=#84 id=84 data-nosnippet>84</a>
-<a href=#85 id=85 data-nosnippet>85</a>    generate_binaural_beats(
-<a href=#86 id=86 data-nosnippet>86</a>        preset_options,
-<a href=#87 id=87 data-nosnippet>87</a>        Arc::clone(<span class="kw-2">&amp;</span>cancel_token),
-<a href=#88 id=88 data-nosnippet>88</a>    )<span class="question-mark">?</span>;
+<a href=#62 id=62 data-nosnippet>62</a>    <span class="prelude-val">Ok</span>(())
+<a href=#63 id=63 data-nosnippet>63</a>}
+<a href=#64 id=64 data-nosnippet>64</a>
+<a href=#65 id=65 data-nosnippet>65</a><span class="doccomment">/// A helper funciton that sets off the running of the binaural beat tones.
+<a href=#66 id=66 data-nosnippet>66</a>/// It also spawns a new thread in order to watch for early completion.
+<a href=#67 id=67 data-nosnippet>67</a></span><span class="kw">fn </span>run_binaural_beat(preset_options: BinauralPresetGroup) -&gt; <span class="prelude-ty">Result</span>&lt;(), Error&gt; {
+<a href=#68 id=68 data-nosnippet>68</a>    <span class="kw">let </span>cancel_token = Arc::new(AtomicBool::new(<span class="bool-val">false</span>));
+<a href=#69 id=69 data-nosnippet>69</a>    <span class="kw">let </span>cancel_token_clone = Arc::clone(<span class="kw-2">&amp;</span>cancel_token);
+<a href=#70 id=70 data-nosnippet>70</a>
+<a href=#71 id=71 data-nosnippet>71</a>    <span class="comment">// 2. Start a separate thread to listen for user input
+<a href=#72 id=72 data-nosnippet>72</a>    </span>std::thread::spawn(<span class="kw">move </span>|| {
+<a href=#73 id=73 data-nosnippet>73</a>        <span class="macro">println!</span>(<span class="string">"Press Enter to stop playback."</span>);
+<a href=#74 id=74 data-nosnippet>74</a>
+<a href=#75 id=75 data-nosnippet>75</a>        <span class="kw">loop </span>{
+<a href=#76 id=76 data-nosnippet>76</a>            <span class="kw">match </span>event::read() {
+<a href=#77 id=77 data-nosnippet>77</a>                <span class="prelude-val">Ok</span>(Event::Key(key_event)) =&gt; {
+<a href=#78 id=78 data-nosnippet>78</a>                    <span class="kw">if </span>key_event.kind == KeyEventKind::Press &amp;&amp; key_event.code == KeyCode::Enter {
+<a href=#79 id=79 data-nosnippet>79</a>                        cancel_token_clone.store(<span class="bool-val">true</span>, Ordering::Relaxed);
+<a href=#80 id=80 data-nosnippet>80</a>                    }
+<a href=#81 id=81 data-nosnippet>81</a>                }
+<a href=#82 id=82 data-nosnippet>82</a>                <span class="prelude-val">Ok</span>(<span class="kw">_</span>) =&gt; {} <span class="comment">// Ignore other events
+<a href=#83 id=83 data-nosnippet>83</a>                </span><span class="prelude-val">Err</span>(err) =&gt; <span class="macro">eprintln!</span>(<span class="string">"There was an error, please try again. {}"</span>, err),
+<a href=#84 id=84 data-nosnippet>84</a>            }
+<a href=#85 id=85 data-nosnippet>85</a>        }
+<a href=#86 id=86 data-nosnippet>86</a>    });
+<a href=#87 id=87 data-nosnippet>87</a>
+<a href=#88 id=88 data-nosnippet>88</a>    generate_binaural_beats(preset_options, Arc::clone(<span class="kw-2">&amp;</span>cancel_token))<span class="question-mark">?</span>;
 <a href=#89 id=89 data-nosnippet>89</a>
 <a href=#90 id=90 data-nosnippet>90</a>    <span class="prelude-val">Ok</span>(())
 <a href=#91 id=91 data-nosnippet>91</a>}
 <a href=#92 id=92 data-nosnippet>92</a>
 <a href=#93 id=93 data-nosnippet>93</a><span class="doccomment">/// A helper function that just prints out the program name and author.
-<a href=#94 id=94 data-nosnippet>94</a></span><span class="kw">fn </span>print_program_info(title : <span class="kw-2">&amp;</span>str, author_text : <span class="kw-2">&amp;</span>str) {
+<a href=#94 id=94 data-nosnippet>94</a></span><span class="kw">fn </span>print_program_info(title: <span class="kw-2">&amp;</span>str, author_text: <span class="kw-2">&amp;</span>str) {
 <a href=#95 id=95 data-nosnippet>95</a>    <span class="kw">let </span>max_chars = cmp::max(title.len(), author_text.len());
 <a href=#96 id=96 data-nosnippet>96</a>    <span class="kw">let </span>separator = <span class="string">"="</span>.repeat(max_chars + <span class="number">10</span>);
-<a href=#97 id=97 data-nosnippet>97</a>    <span class="macro">println!</span>(<span class="string">"{}"</span>,separator.blue());
+<a href=#97 id=97 data-nosnippet>97</a>    <span class="macro">println!</span>(<span class="string">"{}"</span>, separator.blue());
 <a href=#98 id=98 data-nosnippet>98</a>    <span class="macro">println!</span>(<span class="string">"   {}   "</span>, title.red().bold());
 <a href=#99 id=99 data-nosnippet>99</a>    <span class="macro">println!</span>(<span class="string">"   {}   "</span>, author_text.red().bold().italic());
-<a href=#100 id=100 data-nosnippet>100</a>    <span class="macro">println!</span>(<span class="string">"{}"</span>,separator.blue());
+<a href=#100 id=100 data-nosnippet>100</a>    <span class="macro">println!</span>(<span class="string">"{}"</span>, separator.blue());
 <a href=#101 id=101 data-nosnippet>101</a>}</code></pre></div></section></main></body></html>
