@@ -23,12 +23,11 @@ mod modules;
 fn main() -> Result<(), Error> {
     let preset_options = preset_list();
     let duration_options = duration_list();
-    let preset_length = preset_options.len();
-
+    
     print_program_info();
 
     let chosen_preset = Select::new("Choose a preset: ", preset_options)
-        .with_page_size(preset_length)
+        .with_page_size(7)
         .prompt();
 
     match chosen_preset {
