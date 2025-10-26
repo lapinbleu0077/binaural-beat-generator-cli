@@ -25,7 +25,7 @@ fn main() -> Result<(), Error> {
     let duration_options = duration_list();
     let preset_length = preset_options.len();
 
-    print_program_info("Binaural Beat Generator", "By Chris Horton");
+    print_program_info();
 
     let chosen_preset = Select::new("Choose a preset: ", preset_options)
         .with_page_size(preset_length)
@@ -91,11 +91,12 @@ fn run_binaural_beat(preset_options: BinauralPresetGroup) -> Result<(), Error> {
 }
 
 /// A helper function that just prints out the program name and author.
-fn print_program_info(title: &str, author_text: &str) {
-    let max_chars = cmp::max(title.len(), author_text.len());
-    let separator = "=".repeat(max_chars + 10);
-    println!("{}", separator.blue());
-    println!("   {}   ", title.red().bold());
-    println!("   {}   ", author_text.red().bold().italic());
-    println!("{}", separator.blue());
+fn print_program_info() {
+    let bar = "|" ;
+    println!("\n{:-^50}","Binaural Beat Generator".red().bold().italic());
+    println!("{: <25}{: >25}",bar.blue().bold(), bar.blue().bold());
+    println!("{first_name:-<25}{last_name:->25}\n", 
+        first_name="Chris".blue().bold(), 
+        last_name = "Horton".blue().bold());
+    
 }
