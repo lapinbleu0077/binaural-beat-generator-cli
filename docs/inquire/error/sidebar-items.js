@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["InquireError"],"type":["CustomUserError","InquireResult"]};

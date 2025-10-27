@@ -6,7 +6,6 @@
 extern crate cpal;
 use colored::Colorize;
 use crossterm::event::{self, Event, KeyCode, KeyEventKind};
-use std::cmp;
 use std::sync::Arc;
 use std::sync::atomic::{AtomicBool, Ordering};
 

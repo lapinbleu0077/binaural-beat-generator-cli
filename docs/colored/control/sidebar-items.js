@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["set_override","unset_override"],"static":["SHOULD_COLORIZE"],"struct":["ShouldColorize"]};

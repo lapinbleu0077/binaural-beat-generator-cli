@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"type":["Completer","Scorer","Suggester"]};

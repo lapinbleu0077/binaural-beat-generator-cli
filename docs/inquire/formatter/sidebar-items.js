@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"constant":["DEFAULT_BOOL_FORMATTER","DEFAULT_STRING_FORMATTER"],"type":["BoolFormatter","CustomTypeFormatter","MultiOptionFormatter","OptionFormatter","StringFormatter"]};

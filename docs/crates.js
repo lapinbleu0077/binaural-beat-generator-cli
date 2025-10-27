@@ -1,2 +1,2 @@
-window.ALL_CRATES = ["alsa","alsa_sys","anyhow","binaural_beat_generator_cli","bitflags","byteorder","cfg_if","colored","convert_case","cpal","crossterm","dasp_sample","derive_more","derive_more_impl","document_features","dyn_clone","fuzzy_matcher","fxhash","inquire","libc","linux_raw_sys","litrs","lock_api","log","mio","newline_converter","once_cell","parking_lot","parking_lot_core","proc_macro2","quote","rustix","scopeguard","signal_hook","signal_hook_mio","signal_hook_registry","smallvec","syn","thread_local","unicode_ident","unicode_segmentation","unicode_width"];
-//{"start":21,"fragment_lengths":[6,11,9,30,11,12,9,10,15,7,12,14,14,19,20,12,16,9,10,7,16,8,11,6,6,20,12,14,19,14,8,9,13,14,18,23,11,6,15,16,23,16]}
+window.ALL_CRATES = ["binaural_beat_generator_cli"];
+//{"start":21,"fragment_lengths":[29]}

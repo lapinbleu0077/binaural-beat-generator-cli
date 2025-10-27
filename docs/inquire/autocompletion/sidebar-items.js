@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["NoAutoCompletion"],"trait":["Autocomplete"],"type":["Replacement"]};
